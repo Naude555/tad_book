@@ -1,0 +1,56 @@
+{% extends "base/base.html" %}
+{% block content %}
+    <div class="flex justify-center mt-10">
+        <div class="w-full bg-gray-200 p-8 rounded-lg shadow-md">
+            <h1 class="text-center text-3xl font-semibold mb-6">Admin: {{ user.get_full_name }}</h1>
+            <div class="flex justify-between rounded-md shadow-sm mt-4">
+                <a href="{% url "bookings:manage_bookings_admin" user_slug=user.slug %}"
+                   class="text-slate-800 hover:text-yellow-600 text-sm bg-white hover:bg-slate-100 border border-slate-200 rounded font-medium px-4 py-2 inline-flex space-x-1 items-center">
+                    <span>
+                        <svg xmlns="http://www.w3.org/2000/svg"
+                             fill="none"
+                             viewBox="0 0 24 24"
+                             stroke-width="1.5"
+                             stroke="currentColor"
+                             class="w-5 h-5">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" />
+                        </svg>
+                    </span>
+                    <span class="hidden md:inline-block">Calendar View</span>
+                </a>
+                <button hx-get="{% url "bookings:get_manage_bookings_admin" user_slug=user.slug %}"
+                        hx-target="#manage_bookings_admin"
+                        class="text-slate-800 hover:text-yellow-600 text-sm bg-white hover:bg-slate-100 border border-slate-200 rounded font-medium px-4 py-2 inline-flex space-x-1 items-center">
+                    <span>
+                        <svg xmlns="http://www.w3.org/2000/svg"
+                             fill="none"
+                             viewBox="0 0 24 24"
+                             stroke-width="1.5"
+                             stroke="currentColor"
+                             class="w-5 h-5">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" />
+                        </svg>
+                    </span>
+                    <span class="hidden md:inline-block">Upcoming List</span>
+                </button>
+            </div>
+            <div id="manage_bookings_admin">{% include "bookings/partials/all_bookings_calendar_view.html" %}</div>
+            <div class="flex justify-between rounded-md shadow-sm mt-4">
+                <a href="{% url "accounts:organization" %}"
+                   class="text-slate-800 hover:text-yellow-600 text-sm bg-white hover:bg-slate-100 border border-slate-200 rounded font-medium px-4 py-2 inline-flex space-x-1 items-center">
+                    <span>
+                        <svg xmlns="http://www.w3.org/2000/svg"
+                             fill="none"
+                             viewBox="0 0 24 24"
+                             stroke-width="1.5"
+                             stroke="currentColor"
+                             class="w-5 h-5">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" />
+                        </svg>
+                    </span>
+                    <span class="hidden md:inline-block">Back</span>
+                </a>
+            </div>
+        </div>
+    </div>
+{% endblock content %}

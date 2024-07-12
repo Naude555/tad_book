@@ -1,0 +1,94 @@
+{% extends "base/base.html" %}
+{% load widget_tweaks %}
+{% block content %}
+  <div class="flex justify-center mt-10">
+    <div class="w-full max-w-2xl bg-gray-200 p-8 rounded-lg shadow-md">
+      <h1 class="text-3xl font-semibold mb-4">Update Organization: {{ organization.name }}</h1>
+      <form method="post">
+        {% if form.errors %}
+          <ul>
+            {% for key,value in form.errors.items %}
+              <li>
+                <span class="block text-sm font-medium text-red-700">{{ value|escape }}</span>
+              </li>
+            {% endfor %}
+          </ul>
+        {% endif %}
+        {% csrf_token %}
+        <div class="mb-4">
+          <label for="{{ form.name.id_for_label }}"
+                 class="block text-lg font-medium text-gray-700">{{ form.name.label_tag }}</label>
+          {% render_field form.name class="text-md block px-3 py-2  rounded-lg w-full bg-white border-2 border-gray-300 placeholder-gray-600 shadow-md focus:placeholder-gray-500 focus:bg-white focus:border-gray-600 focus:outline-none" placeholder="Enter organization name" autofocus='True' %}
+        </div>
+        <div class="mb-4">
+          <label for="{{ form.asset_name.id_for_label }}"
+                 class="block text-lg font-medium text-gray-700">{{ form.asset_name.label_tag }}</label>
+          {% render_field form.asset_name class="text-md block px-3 py-2  rounded-lg w-full bg-white border-2 border-gray-300 placeholder-gray-600 shadow-md focus:placeholder-gray-500 focus:bg-white focus:border-gray-600 focus:outline-none" placeholder="Enter what you want your Assets to be refered to..." %}
+        </div>
+        <div class="mb-4">
+          <label for="{{ form.exclusive_booking_accross_organization.id_for_label }}"
+                 class="block text-lg font-medium text-gray-700">
+            {{ form.exclusive_booking_accross_organization.label_tag }}
+          </label>
+          <span class="text-sm text-gray-500">{{ form.exclusive_booking_accross_organization.help_text }}</span>
+          <label class="inline-flex items-center me-5 cursor-pointer">
+            <input name="exclusive_booking_accross_organization"
+                   id="id_exclusive_booking_accross_organization"
+                   type="checkbox"
+                   class="sr-only peer"
+                   {% if form.exclusive_booking_accross_organization.value == True %}checked{% endif %} />
+            <div class="relative w-11 h-6 bg-gray-200 rounded-full peer dark:bg-gray-700 peer-focus:ring-4 peer-focus:ring-green-300 dark:peer-focus:ring-green-800 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-green-600">
+            </div>
+          </label>
+        </div>
+        <div class="mb-4">
+          <label for="{{ form.exclusive_booking_accross_asset.id_for_label }}"
+                 class="block text-lg font-medium text-gray-700">
+            {{ form.exclusive_booking_accross_asset.label_tag }}
+          </label>
+          <span class="text-sm text-gray-500">{{ form.exclusive_booking_accross_asset.help_text }}</span>
+          <label class="inline-flex items-center me-5 cursor-pointer">
+            <input name="exclusive_booking_accross_asset"
+                   id="id_exclusive_booking_accross_asset"
+                   type="checkbox"
+                   class="sr-only peer"
+                   {% if form.exclusive_booking_accross_asset.value == True %}checked{% endif %} />
+            <div class="relative w-11 h-6 bg-gray-200 rounded-full peer dark:bg-gray-700 peer-focus:ring-4 peer-focus:ring-green-300 dark:peer-focus:ring-green-800 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-green-600">
+            </div>
+          </label>
+        </div>
+        <!-- Add other fields as needed -->
+        <div class="flex items-center justify-between rounded-md  mb-2">
+          <button type="submit"
+                  class="text-slate-800 hover:text-green-600 text-sm bg-white hover:bg-slate-100 border border-slate-200 rounded font-medium px-4 py-2 inline-flex space-x-1 items-center">
+            <span>
+              <svg xmlns="http://www.w3.org/2000/svg"
+                   fill="none"
+                   viewBox="0 0 24 24"
+                   stroke-width="1.5"
+                   stroke="currentColor"
+                   class="size-6">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 16.875h3.375m0 0h3.375m-3.375 0V13.5m0 3.375v3.375M6 10.5h2.25a2.25 2.25 0 0 0 2.25-2.25V6a2.25 2.25 0 0 0-2.25-2.25H6A2.25 2.25 0 0 0 3.75 6v2.25A2.25 2.25 0 0 0 6 10.5Zm0 9.75h2.25A2.25 2.25 0 0 0 10.5 18v-2.25a2.25 2.25 0 0 0-2.25-2.25H6a2.25 2.25 0 0 0-2.25 2.25V18A2.25 2.25 0 0 0 6 20.25Zm9.75-9.75H18a2.25 2.25 0 0 0 2.25-2.25V6A2.25 2.25 0 0 0 18 3.75h-2.25A2.25 2.25 0 0 0 13.5 6v2.25a2.25 2.25 0 0 0 2.25 2.25Z" />
+              </svg>
+            </span>
+            <span class="hidden md:inline-block">Update</span>
+          </button>
+          <a href="{% url 'accounts:organization_detail' organization_slug=organization.slug %}"
+             class="text-slate-800 hover:text-yellow-600 text-sm bg-white hover:bg-slate-100 border border-slate-200 rounded font-medium px-4 py-2 inline-flex space-x-1 items-center">
+            <span>
+              <svg xmlns="http://www.w3.org/2000/svg"
+                   fill="none"
+                   viewBox="0 0 24 24"
+                   stroke-width="1.5"
+                   stroke="currentColor"
+                   class="w-5 h-5">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" />
+              </svg>
+            </span>
+            <span class="hidden md:inline-block">Back</span>
+          </a>
+        </div>
+      </form>
+    </div>
+  </div>
+{% endblock content %}

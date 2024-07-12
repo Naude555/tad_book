@@ -1,0 +1,52 @@
+<div id="today_bookings" class="flex justify-center">
+    {% if grouped_data %}
+        <div class="w-full bg-gray-200 rounded-lg shadow-md">
+            {% for organization, assets in grouped_data.items %}
+                <div class="organization-section bg-white shadow-md rounded-lg p-6 mb-4">
+                    <div class="flex items-center justify-between mb-2">
+                        <h2 class="text-2xl font-semibold">{{ organization.name }}</h2>
+                        <a href="{% url 'bookings:homepage' organization_slug=organization.slug %}"
+                           class="text-slate-800 hover:text-orange-600 text-sm bg-white hover:bg-slate-100 border border-slate-200 rounded font-medium px-4 py-2 inline-flex space-x-1 items-center">
+                            <svg xmlns="http://www.w3.org/2000/svg"
+                                 fill="none"
+                                 viewBox="0 0 24 24"
+                                 stroke-width="1.5"
+                                 stroke="currentColor"
+                                 class="w-6 h-6">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 0 1 2.25-2.25h13.5A2.25 2.25 0 0 1 21 7.5v11.25m-18 0A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75m-18 0v-7.5A2.25 2.25 0 0 1 5.25 9h13.5A2.25 2.25 0 0 1 21 11.25v7.5m-9-6h.008v.008H12v-.008ZM12 15h.008v.008H12V15Zm0 2.25h.008v.008H12v-.008ZM9.75 15h.008v.008H9.75V15Zm0 2.25h.008v.008H9.75v-.008ZM7.5 15h.008v.008H7.5V15Zm0 2.25h.008v.008H7.5v-.008Zm6.75-4.5h.008v.008h-.008v-.008Zm0 2.25h.008v.008h-.008V15Zm0 2.25h.008v.008h-.008v-.008Zm2.25-4.5h.008v.008H16.5v-.008Zm0 2.25h.008v.008H16.5V15Z" />
+                            </svg>
+                            <span class="ml-2 hidden sm:inline-block group-hover:inline-block">Make New Booking</span>
+                        </a>
+                    </div>
+                    {% for asset, bookable_assets in assets.items %}
+                        <div class="asset-section bg-gray-100 shadow-md rounded-lg p-4 mb-2">
+                            <h3 class="text-xl font-semibold mb-2">{{ asset.name }}</h3>
+                            {% for bookable_asset, bookings in bookable_assets.items %}
+                                <div class="bookable-asset-section bg-gray-200 shadow-md rounded-lg p-2 mb-2">
+                                    <h4 class="text-lg font-semibold mb-2">{{ bookable_asset.name }}</h4>
+                                    <table class="table-auto table-fixed border-collapse w-full mt-2">
+                                        <thead class="bg-gray-800 text-white">
+                                            <tr>
+                                                <th class="px-4 py-2">Date</th>
+                                                <th class="px-4 py-2">Start Time</th>
+                                                <th class="px-4 py-2">End Time</th>
+                                                <th class="px-4 py-2">Status</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="booking">
+                                            {% for booking in bookings %}
+                                                {% include "bookings/partials/booking_today.html" %}
+                                            {% endfor %}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    {% endfor %}
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <h2 class="text-2xl font-semibold">No Bookings Today</h2>
+    {% endif %}
+</div>

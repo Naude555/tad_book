@@ -1,0 +1,89 @@
+{% extends "base/base.html" %}
+{% load widget_tweaks %}
+{% block content %}
+    <div class="flex justify-center mt-10">
+        <div class="w-full max-w-2xl bg-gray-200 p-8 rounded-lg shadow-md">
+            <h1 class="text-3xl font-semibold mb-4">Custom Booking {{ asset.name }}</h1>
+            {% if form.errors %}
+                <ul>
+                    {% for key,value in form.errors.items %}
+                        <li>
+                            <span class="block text-sm font-medium text-red-700">{{ value|escape }}</span>
+                        </li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+            <form method="post">
+                {% csrf_token %}
+                <div class="mb-4">
+                    <label for="{{ form.date.id_for_label }}"
+                           class="block text-lg font-medium text-gray-700">{{ form.date.label_tag }}</label>
+                    {% render_field form.date class="text-md block px-3 py-2  rounded-lg w-full bg-white border-2 border-gray-300 placeholder-gray-600 shadow-md focus:placeholder-gray-500 focus:bg-white focus:border-gray-600 focus:outline-none" placeholder="Select Date" autofocus='True' %}
+                </div>
+                <div class="mb-4">
+                    <label for="{{ form.start_time.id_for_label }}"
+                           class="block text-lg font-medium text-gray-700">{{ form.start_time.label_tag }}</label>
+                    {% render_field form.start_time class="text-md block px-3 py-2  rounded-lg w-full bg-white border-2 border-gray-300 placeholder-gray-600 shadow-md focus:placeholder-gray-500 focus:bg-white focus:border-gray-600 focus:outline-none" placeholder="Start Time" %}
+                </div>
+                <div class="mb-4">
+                    <label for="{{ form.end_time.id_for_label }}"
+                           class="block text-lg font-medium text-gray-700">{{ form.end_time.label_tag }}</label>
+                    {% render_field form.end_time class="text-md block px-3 py-2  rounded-lg w-full bg-white border-2 border-gray-300 placeholder-gray-600 shadow-md focus:placeholder-gray-500 focus:bg-white focus:border-gray-600 focus:outline-none" placeholder="End Time" %}
+                </div>
+                <div class="mb-4">
+                    <label for="{{ form.bookable_asset.id_for_label }}"
+                           class="block text-lg font-medium text-gray-700">{{ asset.bookable_asset_name }}</label>
+                    {% render_field form.bookable_asset class="text-md block px-3 py-2  rounded-lg w-full bg-white border-2 border-gray-300 placeholder-gray-600 shadow-md focus:placeholder-gray-500 focus:bg-white focus:border-gray-600 focus:outline-none" %}
+                </div>
+                <!-- Add any other fields you want for creating an organization -->
+                <div class="flex items-center justify-between rounded-md  mb-2">
+                    <button type="submit"
+                            class="text-slate-800 hover:text-blue-600 text-sm bg-white hover:bg-slate-100 border border-slate-200 rounded font-medium px-4 py-2 inline-flex space-x-1 items-center">
+                        <span>
+                            <svg xmlns="http://www.w3.org/2000/svg"
+                                 fill="none"
+                                 viewBox="0 0 24 24"
+                                 stroke-width="1.5"
+                                 stroke="currentColor"
+                                 class="size-6">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 16.875h3.375m0 0h3.375m-3.375 0V13.5m0 3.375v3.375M6 10.5h2.25a2.25 2.25 0 0 0 2.25-2.25V6a2.25 2.25 0 0 0-2.25-2.25H6A2.25 2.25 0 0 0 3.75 6v2.25A2.25 2.25 0 0 0 6 10.5Zm0 9.75h2.25A2.25 2.25 0 0 0 10.5 18v-2.25a2.25 2.25 0 0 0-2.25-2.25H6a2.25 2.25 0 0 0-2.25 2.25V18A2.25 2.25 0 0 0 6 20.25Zm9.75-9.75H18a2.25 2.25 0 0 0 2.25-2.25V6A2.25 2.25 0 0 0 18 3.75h-2.25A2.25 2.25 0 0 0 13.5 6v2.25a2.25 2.25 0 0 0 2.25 2.25Z" />
+                            </svg>
+                        </span>
+                        <span class="hidden md:inline-block">Create</span>
+                    </button>
+                    <a href="{% url 'bookings:manage_bookings_asset_upcoming_list_view' asset_slug=asset.slug %}"
+                       class="text-slate-800 hover:text-yellow-600 text-sm bg-white hover:bg-slate-100 border border-slate-200 rounded font-medium px-4 py-2 inline-flex space-x-1 items-center">
+                        <span>
+                            <svg xmlns="http://www.w3.org/2000/svg"
+                                 fill="none"
+                                 viewBox="0 0 24 24"
+                                 stroke-width="1.5"
+                                 stroke="currentColor"
+                                 class="w-5 h-5">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" />
+                            </svg>
+                        </span>
+                        <span class="hidden md:inline-block">Back</span>
+                    </a>
+                </div>
+            </form>
+        </div>
+    </div>
+{% endblock content %}
+{% block script %}
+    <script>
+        $("input[name='date']").flatpickr();
+        $("input[name='start_time']").flatpickr({
+            enableTime: true,
+            noCalendar: true,
+            dateFormat: "H:i",
+            time_24hr: true
+        });
+        $("input[name='end_time']").flatpickr({
+            enableTime: true,
+            noCalendar: true,
+            dateFormat: "H:i",
+            time_24hr: true
+        });
+    </script>
+{% endblock script %}

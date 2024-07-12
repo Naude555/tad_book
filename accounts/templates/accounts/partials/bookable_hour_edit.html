@@ -1,0 +1,63 @@
+{% load widget_tweaks %}
+<tr hx-target="this" hx-swap="outerHTML">
+    <td class="border px-4 py-2 overflow-hidden whitespace-normal">
+        {{ bookable_hour.get_day_of_week_str }}
+        {% if form.errors %}
+            <ul>
+                {% for key,value in form.errors.items %}
+                    <li>
+                        <span class="block text-sm font-medium text-red-700">{{ value|escape }}</span>
+                    </li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+    </td>
+    <td class="border px-4 py-2 overflow-hidden whitespace-normal">
+        {% render_field form.start_time class="text-md block px-3 py-2  rounded-lg w-full bg-white border-2 border-gray-300 placeholder-gray-600 shadow-md focus:placeholder-gray-500 focus:bg-white focus:border-gray-600 focus:outline-none" placeholder="Enter asset name" autofocus='True' %}
+        <span class="block text-sm font-medium text-red-700">{{ form.start_time.errors }}</span>
+    </td>
+    <td class="border px-4 py-2 overflow-hidden whitespace-normal">
+        {% render_field form.end_time class="text-md block px-3 py-2  rounded-lg w-full bg-white border-2 border-gray-300 placeholder-gray-600 shadow-md focus:placeholder-gray-500 focus:bg-white focus:border-gray-600 focus:outline-none" placeholder=form.bookable_asset_name.help_text %}
+        <span class="block text-sm font-medium text-red-700">{{ form.end_time.errors }}</span>
+    </td>
+    <td class="border px-4 py-2 overflow-hidden whitespace-normal">
+        <label class="inline-flex items-center me-5 cursor-pointer">
+            <input name="is_active"
+                   id="id_is_active"
+                   type="checkbox"
+                   class="sr-only peer"
+                   {% if form.is_active.value == True %}checked{% endif %} />
+            <div class="relative w-11 h-6 bg-gray-200 rounded-full peer dark:bg-gray-700 peer-focus:ring-4 peer-focus:ring-green-300 dark:peer-focus:ring-green-800 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-green-600">
+            </div>
+        </label>
+    </td>
+    <td class="border px-4 py-2 overflow-hidden whitespace-normal">
+        <button type="submit"
+                hx-post="{% url "accounts:asset_bookable_hours_edit" asset_bookable_hours_id=bookable_hour.id %}"
+                hx-include="closest tr"
+                class="text-slate-800 hover:text-red-600 text-sm bg-white hover:bg-slate-100 border border-slate-200 rounded-md font-medium px-2 py-1 flex items-center justify-center transition-all duration-300 ease-in-out group">
+            <svg xmlns="http://www.w3.org/2000/svg"
+                 fill="none"
+                 viewBox="0 0 24 24"
+                 stroke-width="1.5"
+                 stroke="currentColor"
+                 class="size-6">
+                <path stroke-linecap="round" stroke-linejoin="round" d="m9.75 9.75 4.5 4.5m0-4.5-4.5 4.5M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+            </svg>
+            <span class="ml-2 hidden sm:inline-block group-hover:inline-block">Submit</span>
+        </button>
+        <button type="button"
+                hx-get="{% url 'accounts:asset_bookable_hours_get' asset_bookable_hours_id=bookable_hour.id %}"
+                class="text-slate-800 hover:text-red-600 text-sm bg-white hover:bg-slate-100 border border-slate-200 rounded-md font-medium px-2 py-1 flex items-center justify-center transition-all duration-300 ease-in-out group">
+            <svg xmlns="http://www.w3.org/2000/svg"
+                 fill="none"
+                 viewBox="0 0 24 24"
+                 stroke-width="1.5"
+                 stroke="currentColor"
+                 class="size-6">
+                <path stroke-linecap="round" stroke-linejoin="round" d="m9.75 9.75 4.5 4.5m0-4.5-4.5 4.5M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+            </svg>
+            <span class="ml-2 hidden sm:inline-block group-hover:inline-block">Cancel</span>
+        </button>
+    </td>
+</tr>

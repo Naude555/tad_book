@@ -1,0 +1,94 @@
+<tr hx-target="this" hx-swap="outerHTML">
+    <td class="border px-4 py-2 overflow-hidden whitespace-normal">{{ bookable_asset.name }}</td>
+    <td class="border px-4 py-2 overflow-hidden whitespace-normal">
+        <input type="color"
+               name="calendar_colour"
+               id="id_calendar_colour"
+               required
+               class="p-1 h-12 w-14 block text-md block px-3 py-2  rounded-lg w-full bg-white border-2 border-gray-300 placeholder-gray-600 shadow-md focus:placeholder-gray-500 focus:bg-white focus:border-gray-600"
+               value="{{ bookable_asset.calendar_colour }}"
+               disabled />
+    </td>
+    <td class="border px-4 py-2 overflow-hidden whitespace-normal">
+        <label class="inline-flex items-center me-5 cursor-pointer">
+            <input name="share_link"
+                   id="id_share_link"
+                   type="checkbox"
+                   class="sr-only peer"
+                   {% if bookable_asset.share_link == True %}checked{% endif %}
+                   disabled />
+            <div class="relative w-11 h-6 bg-gray-200 rounded-full peer dark:bg-gray-700 peer-focus:ring-4 peer-focus:ring-green-300 dark:peer-focus:ring-green-800 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-green-600">
+            </div>
+        </label>
+    </td>
+    <td class="border px-4 py-2">
+        {% if bookable_asset.name != "Any" %}
+            <div class="flex flex-wrap gap-2">
+                <button hx-get="{% url 'accounts:bookable_asset_edit' bookable_asset_id=bookable_asset.id %}"
+                        class="text-slate-800 hover:text-green-600 text-sm bg-white hover:bg-slate-100 border border-slate-200 rounded-md font-medium px-2 py-1 flex items-center justify-center transition-all duration-300 ease-in-out group">
+                    <svg xmlns="http://www.w3.org/2000/svg"
+                         fill="none"
+                         viewBox="0 0 24 24"
+                         stroke-width="1.5"
+                         stroke="currentColor"
+                         class="w-5 h-5">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 011.13-1.897l8.932-8.931zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0115.75 21H5.25A2.25 2.25 0 013 18.75V8.25A2.25 2.25 0 015.25 6H10" />
+                    </svg>
+                    <span class="ml-2 hidden lg:inline-block group-hover:inline-block">Edit</span>
+                </button>
+                <button hx-post="{% url 'accounts:bookable_asset_delete' bookable_asset_id=bookable_asset.id %}"
+                        hx-trigger='confirm_bookable_asset_delete'
+                        onClick="Swal.fire({ title: 'Are you sure?', text: 'Delete bookable asset {{ bookable_asset.name }}?', icon: 'warning', showCancelButton: true, confirmButtonColor: '#22C55E', cancelButtonColor: '#EF4444', confirmButtonText: 'Yes, Delete!' }).then((result) => { if (result.isConfirmed) { htmx.trigger(this, 'confirm_bookable_asset_delete'); Swal.fire({ title: 'Deleted!', timer: 2000, text: 'You Deleted {{ bookable_asset.name }} .', icon: 'success' }); } });"
+                        class="text-slate-800 hover:text-red-600 text-sm bg-white hover:bg-slate-100 border border-slate-200 rounded-md font-medium px-2 py-1 flex items-center justify-center transition-all duration-300 ease-in-out group">
+                    <svg xmlns="http://www.w3.org/2000/svg"
+                         fill="none"
+                         viewBox="0 0 24 24"
+                         stroke-width="1.5"
+                         stroke="currentColor"
+                         class="w-5 h-5">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0" />
+                    </svg>
+                    <span class="ml-2 hidden lg:inline-block group-hover:inline-block">Delete</span>
+                </button>
+                <a href="{% url 'bookings:custom_booking' asset_slug=asset.slug %}?bookable_asset={{ bookable_asset.id }}"
+                   class="text-slate-800 hover:text-orange-600 text-sm bg-white hover:bg-slate-100 border border-slate-200 rounded font-medium px-4 py-2 inline-flex space-x-1 items-center">
+                    <svg xmlns="http://www.w3.org/2000/svg"
+                         fill="none"
+                         viewBox="0 0 24 24"
+                         stroke-width="1.5"
+                         stroke="currentColor"
+                         class="w-6 h-6">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 0 1 2.25-2.25h13.5A2.25 2.25 0 0 1 21 7.5v11.25m-18 0A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75m-18 0v-7.5A2.25 2.25 0 0 1 5.25 9h13.5A2.25 2.25 0 0 1 21 11.25v7.5m-9-6h.008v.008H12v-.008ZM12 15h.008v.008H12V15Zm0 2.25h.008v.008H12v-.008ZM9.75 15h.008v.008H9.75V15Zm0 2.25h.008v.008H9.75v-.008ZM7.5 15h.008v.008H7.5V15Zm0 2.25h.008v.008H7.5v-.008Zm6.75-4.5h.008v.008h-.008v-.008Zm0 2.25h.008v.008h-.008V15Zm0 2.25h.008v.008h-.008v-.008Zm2.25-4.5h.008v.008H16.5v-.008Zm0 2.25h.008v.008H16.5V15Z" />
+                    </svg>
+                    <span class="ml-2 hidden sm:inline-block group-hover:inline-block">Create Custom Booking</span>
+                </a>
+                <a href="{% url 'bookings:manage_bookings_bookable_asset_calendar_view' bookable_asset_slug=bookable_asset.slug %}"
+                   class="text-slate-800 hover:text-orange-600 text-sm bg-white hover:bg-slate-100 border border-slate-200 rounded font-medium px-4 py-2 inline-flex space-x-1 items-center">
+                    <svg xmlns="http://www.w3.org/2000/svg"
+                         fill="none"
+                         viewBox="0 0 24 24"
+                         stroke-width="1.5"
+                         stroke="currentColor"
+                         class="w-6 h-6">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 0 1 2.25-2.25h13.5A2.25 2.25 0 0 1 21 7.5v11.25m-18 0A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75m-18 0v-7.5A2.25 2.25 0 0 1 5.25 9h13.5A2.25 2.25 0 0 1 21 11.25v7.5m-9-6h.008v.008H12v-.008ZM12 15h.008v.008H12V15Zm0 2.25h.008v.008H12v-.008ZM9.75 15h.008v.008H9.75V15Zm0 2.25h.008v.008H9.75v-.008ZM7.5 15h.008v.008H7.5V15Zm0 2.25h.008v.008H7.5v-.008Zm6.75-4.5h.008v.008h-.008v-.008Zm0 2.25h.008v.008h-.008V15Zm0 2.25h.008v.008h-.008v-.008Zm2.25-4.5h.008v.008H16.5v-.008Zm0 2.25h.008v.008H16.5V15Z" />
+                    </svg>
+                    <span class="ml-2 hidden sm:inline-block group-hover:inline-block">Manage Bookings</span>
+                </a>
+                {% if bookable_asset.share_link %}
+                    <a href="{% url 'bookings:manage_bookings_bookable_asset_calendar_view_share_link' bookable_asset_slug=bookable_asset.slug %}"
+                       class="text-slate-800 hover:text-green-600 text-sm bg-white hover:bg-slate-100 border border-slate-200 rounded font-medium px-4 py-2 inline-flex space-x-1 items-center">
+                        <svg xmlns="http://www.w3.org/2000/svg"
+                             fill="none"
+                             viewBox="0 0 24 24"
+                             stroke-width="1.5"
+                             stroke="currentColor"
+                             class="w-6 h-6">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 0 1 2.25-2.25h13.5A2.25 2.25 0 0 1 21 7.5v11.25m-18 0A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75m-18 0v-7.5A2.25 2.25 0 0 1 5.25 9h13.5A2.25 2.25 0 0 1 21 11.25v7.5m-9-6h.008v.008H12v-.008ZM12 15h.008v.008H12V15Zm0 2.25h.008v.008H12v-.008ZM9.75 15h.008v.008H9.75V15Zm0 2.25h.008v.008H9.75v-.008ZM7.5 15h.008v.008H7.5V15Zm0 2.25h.008v.008H7.5v-.008Zm6.75-4.5h.008v.008h-.008v-.008Zm0 2.25h.008v.008h-.008V15Zm0 2.25h.008v.008h-.008v-.008Zm2.25-4.5h.008v.008H16.5v-.008Zm0 2.25h.008v.008H16.5V15Z" />
+                        </svg>
+                        <span class="ml-2 hidden sm:inline-block group-hover:inline-block">Share Link</span>
+                    </a>
+                {% endif %}
+            </div>
+        {% endif %}
+    </td>
+</tr>

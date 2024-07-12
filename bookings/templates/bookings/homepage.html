@@ -1,0 +1,24 @@
+{% extends "base/base.html" %}
+{% block content %}
+    <div class="flex flex-wrap bg-gray-100 rounded">
+        <div class="w-full xl:w-1/2 flex flex-col mb-4 xl:mb-0 ">
+            <div class="flex items-center justify-center border-b border-gray-400 pb-2 p-2">
+                <span class="text-md font-bold">Check out {{ organization.name }}'s availability and book the date and time that works for you</span>
+            </div>
+            <!-- 50% width content goes here -->
+            {% include "bookings/partials/full_calendar.html" %}
+        </div>
+        <div class="w-full xl:w-1/4  md:w-1/2 flex flex-col mb-4 md:mb-0 ">
+            <div class="flex items-center justify-center border-b border-gray-400 pb-2 p-2">
+                <span class="text-md font-bold">{{ organization.asset_name }} Booking Details</span>
+            </div>
+            {% include "bookings/partials/booking_details.html" %}
+        </div>
+        <div class="w-full xl:w-1/4  md:w-1/2 flex flex-col mb-4 md:mb-0 ">
+            <div class="flex items-center justify-center border-b border-gray-400 pb-2 p-2">
+                <span class="text-md font-bold">Timezone: {{ timezone }}</span>
+            </div>
+            <div id="time_slots_section">{% include "bookings/partials/time_slots.html" %}</div>
+        </div>
+    </div>
+{% endblock content %}

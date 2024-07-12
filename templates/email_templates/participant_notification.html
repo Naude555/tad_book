@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>{{ subject }}</title>
+        <style>
+            body {
+                font-family: Arial, sans-serif;
+                line-height: 1.6;
+                color: #333;
+                padding: 20px;
+                background-color: #f2f2f2;
+            }
+
+            .container {
+                max-width: 600px;
+                margin: 0 auto;
+                background-color: #fff;
+                padding: 20px;
+                border-radius: 10px;
+                box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            }
+
+            h1 {
+                color: #2c3e50;
+                margin-bottom: 20px;
+                text-align: center;
+            }
+
+            h2 {
+                color: #2c3e50;
+                margin-bottom: 20px;
+                text-align: center;
+            }
+
+            h3 {
+                color: #2c3e50;
+                margin-bottom: 20px;
+            }
+
+            p {
+                font-size: 16px;
+                margin-bottom: 10px;
+            }
+
+            .detail {
+                margin-bottom: 20px;
+            }
+
+            .action-link {
+                display: inline-block;
+                margin: 5px 0;
+                padding: 10px 20px;
+                color: #fff;
+                text-decoration: none;
+                text-align: center;
+                border-radius: 5px;
+                transition: background-color 0.3s ease;
+            }
+
+            .approval-link {
+                background-color: #27ae60;
+            }
+
+            .approval-link:hover {
+                background-color: #219150;
+            }
+
+            .reject-link {
+                background-color: #c0392b;
+            }
+
+            .reject-link:hover {
+                background-color: #a02920;
+            }
+
+            .cancel-link {
+                background-color: #f39c12;
+            }
+
+            .cancel-link:hover {
+                background-color: #d68910;
+            }
+
+            .calendar-link {
+                display: block;
+                margin-top: 10px;
+                padding: 10px 20px;
+                background-color: #2980b9;
+                color: #fff;
+                text-decoration: none;
+                text-align: center;
+                border-radius: 5px;
+                transition: background-color 0.3s ease;
+            }
+
+            .calendar-link svg {
+                width: 20px;
+                height: 20px;
+                margin-bottom: -5px;
+                margin-right: 5px;
+                vertical-align: middle;
+            }
+
+            .calendar-link:hover {
+                background-color: #1e6391;
+            }
+
+            .footer {
+                margin-top: 20px;
+                text-align: center;
+                color: #888;
+            }
+
+            .responsive-img {
+                max-width: 100%;
+                height: auto;
+                display: block;
+                margin: 0 auto;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="container">
+            <svg xmlns="http://www.w3.org/2000/svg"
+                 fill="none"
+                 width="50"
+                 height="50"
+                 viewBox="0 0 24 24"
+                 stroke-width="1.5"
+                 stroke="currentColor"
+                 class="size-6">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M12 6.042A8.967 8.967 0 0 0 6 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 0 1 6 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 0 1 6-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0 0 18 18a8.967 8.967 0 0 0-6 2.292m0-14.25v14.25" />
+            </svg>
+            <h2>{{ subject }}</h2>
+            <p>{{ message }}</p>
+            <ul class='detail'>
+                <li>
+                    <strong>Organization:</strong> {{ booking.bookable_asset.asset.organization.name }}
+                </li>
+                <li>
+                    <strong>{{ booking.bookable_asset.asset.organization.asset_name }}:</strong> {{ booking.bookable_asset.asset.name }}
+                </li>
+                <li>
+                    <strong>{{ booking.bookable_asset.asset.bookable_asset_name }}:</strong> {{ booking.bookable_asset.name }}
+                </li>
+                <li>
+                    <strong>Created By:</strong> {{ booking.user.get_full_name }}
+                </li>
+                <li>
+                    <strong>Start time:</strong> {{ booking.start_time }}
+                </li>
+                <li>
+                    <strong>End Time:</strong> {{ booking.end_time }}
+                </li>
+            </ul>
+            {% if booking.status == "accepted" and not removed %}
+                <p>
+                    Google Calendar Link: <a href="{{ google_calendar_url }}" class="calendar-link">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 50 50">
+                        <path d="M 26 2 C 13.308594 2 3 12.308594 3 25 C 3 37.691406 13.308594 48 26 48 C 35.917969 48 41.972656 43.4375 45.125 37.78125 C 48.277344 32.125 48.675781 25.480469 47.71875 20.9375 L 47.53125 20.15625 L 46.75 20.15625 L 26 20.125 L 25 20.125 L 25 30.53125 L 36.4375 30.53125 C 34.710938 34.53125 31.195313 37.28125 26 37.28125 C 19.210938 37.28125 13.71875 31.789063 13.71875 25 C 13.71875 18.210938 19.210938 12.71875 26 12.71875 C 29.050781 12.71875 31.820313 13.847656 33.96875 15.6875 L 34.6875 16.28125 L 41.53125 9.4375 L 42.25 8.6875 L 41.5 8 C 37.414063 4.277344 31.960938 2 26 2 Z M 26 4 C 31.074219 4 35.652344 5.855469 39.28125 8.84375 L 34.46875 13.65625 C 32.089844 11.878906 29.199219 10.71875 26 10.71875 C 18.128906 10.71875 11.71875 17.128906 11.71875 25 C 11.71875 32.871094 18.128906 39.28125 26 39.28125 C 32.550781 39.28125 37.261719 35.265625 38.9375 29.8125 L 39.34375 28.53125 L 27 28.53125 L 27 22.125 L 45.84375 22.15625 C 46.507813 26.191406 46.066406 31.984375 43.375 36.8125 C 40.515625 41.9375 35.320313 46 26 46 C 14.386719 46 5 36.609375 5 25 C 5 13.390625 14.386719 4 26 4 Z">
+                        </path>
+                    </svg>
+                    <span>Add to Calendar</span>
+                </a>
+            </p>
+            <p>
+                Outlook Calendar Link: <a href="{{ outlook_calendar_url }}" class="calendar-link">
+                <svg xmlns="http://www.w3.org/2000/svg"
+                     x="0px"
+                     y="0px"
+                     width="50"
+                     height="50"
+                     viewBox="0 0 50 50">
+                    <path d="M 28.875 0 C 28.855469 0.0078125 28.832031 0.0195313 28.8125 0.03125 L 0.8125 5.34375 C 0.335938 5.433594 -0.0078125 5.855469 0 6.34375 L 0 43.65625 C -0.0078125 44.144531 0.335938 44.566406 0.8125 44.65625 L 28.8125 49.96875 C 29.101563 50.023438 29.402344 49.949219 29.632813 49.761719 C 29.859375 49.574219 29.996094 49.296875 30 49 L 30 38 L 34.0625 38 C 34.019531 38.332031 34 38.660156 34 39 C 34 43.40625 37.59375 47 42 47 C 46.40625 47 50 43.40625 50 39 C 50 37.609375 49.628906 36.296875 49 35.15625 C 49.003906 35.105469 49.003906 35.050781 49 35 L 49 17.65625 C 49.082031 17.433594 49.082031 17.191406 49 16.96875 L 49 12 C 49 11.449219 48.550781 11 48 11 L 30 11 L 30 1 C 30.003906 0.710938 29.878906 0.4375 29.664063 0.246094 C 29.449219 0.0546875 29.160156 -0.0351563 28.875 0 Z M 28 2.1875 L 28 11.6875 C 27.941406 11.882813 27.941406 12.085938 28 12.28125 L 28 36.6875 C 27.941406 36.882813 27.941406 37.085938 28 37.28125 L 28 47.8125 L 2 42.84375 L 2 7.15625 Z M 30 13 L 47 13 L 47 16.78125 L 33.75 24.625 L 30 21.53125 Z M 14.84375 15.53125 C 12.324219 15.53125 10.308594 16.40625 8.78125 18.1875 C 7.253906 19.96875 6.5 22.304688 6.5 25.1875 C 6.5 27.917969 7.246094 30.144531 8.75 31.84375 C 10.253906 33.542969 12.207031 34.40625 14.59375 34.40625 C 17.042969 34.40625 19.007813 33.503906 20.53125 31.75 C 22.054688 29.992188 22.8125 27.679688 22.8125 24.8125 C 22.8125 22.023438 22.09375 19.800781 20.625 18.09375 C 19.15625 16.390625 17.222656 15.53125 14.84375 15.53125 Z M 14.75 19.0625 C 16.027344 19.0625 17.042969 19.605469 17.78125 20.65625 C 18.519531 21.707031 18.875 23.171875 18.875 25.0625 C 18.875 26.878906 18.476563 28.292969 17.71875 29.3125 C 16.957031 30.335938 15.949219 30.84375 14.65625 30.84375 C 13.398438 30.84375 12.371094 30.332031 11.59375 29.28125 C 10.820313 28.230469 10.4375 26.773438 10.4375 24.96875 C 10.4375 23.1875 10.816406 21.769531 11.59375 20.6875 C 12.367188 19.605469 13.433594 19.0625 14.75 19.0625 Z M 47 19.125 L 47 32.78125 C 45.628906 31.679688 43.886719 31 42 31 C 38.660156 31 35.789063 33.082031 34.59375 36 L 30 36 L 30 24.09375 L 33.03125 26.59375 C 33.355469 26.867188 33.820313 26.90625 34.1875 26.6875 Z M 42 33 C 45.324219 33 48 35.675781 48 39 C 48 42.324219 45.324219 45 42 45 C 38.675781 45 36 42.324219 36 39 C 36 35.675781 38.675781 33 42 33 Z M 41 34 L 41 41 L 46 41 L 46 39 L 43 39 L 43 34 Z">
+                    </path>
+                </svg>
+                <span>Add to Calendar</span></a>
+        </a>
+    </p>
+    <p>
+        Yahoo Calendar Link: <a href="{{ yahoo_calendar_url }}" class="calendar-link">
+        <svg xmlns="http://www.w3.org/2000/svg"
+             x="0px"
+             y="0px"
+             width="50"
+             height="50"
+             viewBox="0 0 48 48">
+            <path fill="#673AB7" d="M9,5c0,0,1.4,0.3,2.5,0.3S14,5,14,5l10,17L34.1,5c0,0,1.1,0.4,2.4,0.4C37.9,5.4,39,5,39,5L26,27l0.4,16c0,0-1.4-0.4-2.4-0.4S21.5,43,21.5,43L22,27L9,5z">
+            </path>
+        </svg>
+        <span>Add to Calendar</span></a>
+</p>
+{% endif %}
+</div>
+</body>
+</html>

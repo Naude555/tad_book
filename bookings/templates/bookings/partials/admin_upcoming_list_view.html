@@ -1,0 +1,29 @@
+{% for organization, bookings in grouped_data.items %}
+    <div class="asset-section bg-white shadow-md rounded-lg p-6 mb-4">
+        <a href="{% url "bookings:manage_bookings_organization_calendar_view" organization_slug=organization.slug %}">
+            <h2 class="text-2xl font-semibold mb-2">{{ organization.name }}</h2>
+        </a>
+        <table class="table-auto table-fixed border-collapse w-full mt-2">
+            <thead class="bg-gray-800 text-white">
+                <tr>
+                    <th class="px-4 py-2">
+                        <a href="{% url "bookings:manage_bookings_organization_upcoming_list_view" organization_slug=organization.slug %}">{{ organization.asset_name }}</a>
+                    </th>
+                    <th class="px-4 py-2">Sub</th>
+                    <th class="px-4 py-2">First Name</th>
+                    <th class="px-4 py-2">Last Name</th>
+                    <th class="px-4 py-2">Date</th>
+                    <th class="px-4 py-2">Start Time</th>
+                    <th class="px-4 py-2">End Time</th>
+                    <th class="px-4 py-2">Status</th>
+                    <th class="px-4 py-2">Actions</th>
+                </tr>
+            </thead>
+            <tbody id="booking">
+                {% for booking in bookings %}
+                    {% include "bookings/partials/booking_admin.html" %}
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% endfor %}

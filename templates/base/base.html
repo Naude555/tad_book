@@ -1,0 +1,38 @@
+{% load tailwind_cli %}
+{% load static %}
+{% load tz %}
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta description="Bookings app for resource bookings" />
+        <title>TAD Book</title>
+        <link rel="stylesheet" href="{% static '/css/flatpickr.min.css' %}" />
+        <link rel="stylesheet" href="{% static '/css/tailwind.css' %}" />
+        <script src="{% static '/js/jquery-3.7.1.min.js' %}"></script>
+        <script src="{% static '/js/sweetalert-2.11.js' %}"></script>
+        <script src="{% static '/js/flatpickr.js' %}"></script>
+        <!-- HTMX -->
+        <script src="{% static 'js/htmx-2.0.0.js' %}"></script>
+        <script src="{% static 'js/hyperscript-0.9.12.js' %}"></script>
+        <script src="{% static 'js/fullcalendar-6.1.14.js' %}"></script>
+    </head>
+</head>
+<body>
+    {% include "partials/navbar.html" %}
+    <div class="w-full p-8">
+        {% block content %}
+        {% endblock content %}
+    </div>
+</body>
+<script src="{% static 'js/alpine-3.14.1.js' %}"></script>
+<script>
+    document.body.addEventListener('htmx:configRequest', (event) => {
+        event.detail.headers['X-CSRFToken'] = '{{ csrf_token }}';
+    });
+</script>
+{% block script %}
+{% endblock script %}
+</html>

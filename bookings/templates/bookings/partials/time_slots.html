@@ -1,0 +1,26 @@
+<div id="time_slots" class="p-4 rounded-lg flex-grow ">
+    <div class="text-lg font-semibold mb-2">
+        <input hidden
+               id="selected_date"
+               name="selected_date"
+               value="{{ selected_date }}" />
+        {{ formatted_date }}
+    </div>
+    <div class="bg-white p-4 rounded-lg shadow h-4/5 max-h-96 overflow-y-auto">
+        <ul id="slot-list" class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            {% for slot in available_slots %}
+                <li>
+                    <button hx-post="{% url 'bookings:request_booking' time_slot=slot %}"
+                            hx-target="#slot-list"
+                            hx-swap='outerHTML'
+                            hx-trigger='request_booking'
+                            hx-include="[name='asset'], [name='selected_date'], [name='bookable_asset'], [name='notes']"
+                            onClick="Swal.fire({ title: 'Are you sure?', text: 'Request a booking for {{ formatted_date }} @ {{ slot }}?', icon: 'warning', showCancelButton: true, confirmButtonColor: '#22C55E', cancelButtonColor: '#EF4444', confirmButtonText: 'Yes, Make Booking!' }).then((result) => { if (result.isConfirmed) { htmx.trigger(this, 'request_booking'); Swal.fire({ title: 'Booking Requested!', timer: 2000, text: 'Your booking will be confirmed by the admin.', icon: 'success' }); } });"
+                            class="text-slate-800 hover:text-slate-900 text-lg bg-slate-400 hover:bg-green-600 border border-slate-200 rounded-md font-medium px-2 py-1 flex items-center justify-center transition-all duration-300 ease-in-out group focus:outline-none focus:ring-4 focus:ring-gray-700 active:bg-gray-700 w-full">
+                        {{ slot }}
+                    </button>
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
+</div>

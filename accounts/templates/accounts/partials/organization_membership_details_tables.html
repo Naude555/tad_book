@@ -1,0 +1,19 @@
+{% if accepted_membership %}
+    <h2 class="text-2xl font-semibold mb-2">Organizations You Are a Member Of</h2>
+    <div class="bg-white shadow-md rounded-lg p-6 mb-4">
+        {% include "accounts/partials/organization_table_member.html" %}
+    </div>
+{% endif %}
+{% if invited_membership %}
+    <h2 class="text-2xl font-semibold mb-2">Organizations You Are Invited To</h2>
+    <div class="bg-white shadow-md rounded-lg p-6 mb-4">
+        {% include "accounts/partials/organization_table_invited_member.html" %}
+    </div>
+    <!-- Moved the endif outside of the div -->
+{% endif %}
+{% if pending_membership %}
+    <h2 class="text-2xl font-semibold mb-2">Organizations You requested to join</h2>
+    <div class="bg-white shadow-md rounded-lg p-6 mb-4">
+        {% include "accounts/partials/organization_table_requested_member.html" %}
+    </div>
+{% endif %}

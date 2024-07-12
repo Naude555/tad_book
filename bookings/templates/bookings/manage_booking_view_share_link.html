@@ -1,0 +1,89 @@
+{% extends "base/base.html" %}
+{% load widget_tweaks %}
+{% block content %}
+    <div class="flex justify-center mt-10">
+        <div class="w-full max-w-2xl bg-gray-200 p-8 rounded-lg shadow-md">
+            <h1 class="text-2xl font-semibold mb-2">
+                Booking Detail: {{ booking.bookable_asset.asset.name }} for {{ booking.bookable_asset.name }}
+            </h1>
+            <div class="w-full max-w-2xl bg-gray-200 p-8 rounded-lg shadow-md">
+                <table class="table-auto border-collapse w-full">
+                    <tbody>
+                        <tr>
+                            <th class="text-left px-4 py-2">Organization:</th>
+                            <td class="px-4 py-2">{{ booking.bookable_asset.asset.organization.name }}</td>
+                        </tr>
+                        <tr>
+                            <th class="text-left px-4 py-2">{{ booking.bookable_asset.asset.organization.asset_name }}:</th>
+                            <td class="px-4 py-2">{{ booking.bookable_asset.asset.name }}</td>
+                        </tr>
+                        <tr>
+                            <th class="text-left px-4 py-2">{{ booking.bookable_asset.asset.bookable_asset_name }}:</th>
+                            <td class="px-4 py-2">{{ booking.bookable_asset.name }}</td>
+                        </tr>
+                        <tr>
+                            <th class="text-left px-4 py-2">Date:</th>
+                            <td class="px-4 py-2">{{ booking.date }}</td>
+                        </tr>
+                        <tr>
+                            <th class="text-left px-4 py-2">Time:</th>
+                            <td class="px-4 py-2">{{ booking.start_time }} - {{ booking.end_time }}</td>
+                        </tr>
+                        <tr>
+                            <th class="text-left px-4 py-2">Requested By:</th>
+                            <td class="px-4 py-2">{{ booking.user.get_full_name }}</td>
+                        </tr>
+                        {% if booking.notes %}
+                            <tr>
+                                <th class="text-left px-4 py-2">Notes:</th>
+                                <td class="px-4 py-2">{{ booking.notes }}</td>
+                            </tr>
+                        {% endif %}
+                    </tbody>
+                </table>
+                {% if participant %}
+                    <h3 class="text-2xl font-semibold mt-4 mb-2">Other Participants</h3>
+                    <table class="table-auto border-collapse w-full mt-2">
+                        <tbody id="participant">
+                            {% for participant in participants %}
+                                <tr>
+                                    <td class="px-4 py-2">{{ participant.user.email }}</td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                {% endif %}
+                <h3 class="text-xl font-semibold mt-4">Booking Status: {{ booking.status|title }}</h3>
+            </div>
+            <!-- Add any other fields you want for creating an organization -->
+            <div class="flex items-center justify-between rounded-md  mt-2">
+                <a href="{% url 'bookings:manage_bookings_bookable_asset_calendar_view_share_link' bookable_asset_slug=booking.bookable_asset.slug %}"
+                   class="text-slate-800 hover:text-yellow-600 text-sm bg-white hover:bg-slate-100 border border-slate-200 rounded font-medium px-4 py-2 inline-flex space-x-1 items-center">
+                    <span>
+                        <svg xmlns="http://www.w3.org/2000/svg"
+                             fill="none"
+                             viewBox="0 0 24 24"
+                             stroke-width="1.5"
+                             stroke="currentColor"
+                             class="w-5 h-5">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" />
+                        </svg>
+                    </span>
+                    <span class="hidden md:inline-block">Back</span>
+                </a>
+            </div>
+        </div>
+    </div>
+{% endblock content %}
+{% if share_link %}
+    {% block script %}
+        <script>
+            $("#nav").hide()
+            decTimeout = setTimeout(declareTimeout, 30000);
+
+            function declareTimeout() {
+                window.location.href = "{% url 'bookings:manage_bookings_bookable_asset_calendar_view_share_link' bookable_asset_slug=booking.bookable_asset.slug %}";
+            }
+        </script>
+    {% endblock script %}
+{% endif %}

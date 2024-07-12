@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>{{ subject }}</title>
+        <style>
+            body {
+                font-family: Arial, sans-serif;
+                line-height: 1.6;
+                color: #333;
+                padding: 20px;
+                background-color: #f2f2f2;
+                /* Background color */
+            }
+
+            .container {
+                max-width: 600px;
+                margin: 0 auto;
+                background-color: #fff;
+                /* Container background */
+                padding: 20px;
+                border-radius: 10px;
+                box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+                /* Box shadow */
+            }
+
+            h2 {
+                color: #2c3e50;
+                margin-bottom: 20px;
+                text-align: center;
+            }
+
+            h3 {
+                color: #2c3e50;
+                margin-bottom: 20px;
+                text-align: center;
+            }
+
+            p {
+                font-size: 16px;
+                margin-bottom: 10px;
+            }
+
+            .detail {
+                margin-bottom: 20px;
+            }
+
+            .calendar-link {
+                display: inline-block;
+                margin-top: 20px;
+                padding: 10px 20px;
+                background-color: #2980b9;
+                color: #fff;
+                text-decoration: none;
+                text-align: center;
+                border-radius: 5px;
+                transition: background-color 0.3s ease;
+            }
+
+            .calendar-link:hover {
+                background-color: #1e6391;
+                /* Darker color on hover */
+            }
+
+            .signature {
+                margin-top: 20px;
+                text-align: center;
+                color: #888;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="container">
+            <a href="{{ website_url }}">
+                <svg xmlns="http://www.w3.org/2000/svg"
+                     fill="none"
+                     width="50"
+                     height="50"
+                     viewBox="0 0 24 24"
+                     stroke-width="1.5"
+                     stroke="currentColor"
+                     class="size-6">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 6.042A8.967 8.967 0 0 0 6 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 0 1 6 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 0 1 6-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0 0 18 18a8.967 8.967 0 0 0-6 2.292m0-14.25v14.25" />
+                </svg>
+            </a>
+            <h2>{{ subject }}</h2>
+            <p>{{ message }}</p>
+            <div class="detail">
+                <h3>Membership Details:</h3>
+                <ul>
+                    <li>
+                        <strong>Full Name:</strong> {{ instance.user.get_full_name }}
+                    </li>
+                    <li>
+                        <strong>Organization:</strong> {{ instance.organization.name }}
+                    </li>
+                    <li>
+                        <strong>Membership Role:</strong> {{ instance.role|title }}
+                    </li>
+                    <li>
+                        <strong>Membership Status:</strong> {{ instance.status|title }}
+                    </li>
+                </ul>
+                {% if invitation_url %}
+                    <p>
+                        You have been invited to join. Click <a href="{{ invitation_url }}" class="calendar-link">here</a> to claim your account.
+                    </p>
+                {% endif %}
+            </div>
+            <div class="signature">
+                <p>Thank you,</p>
+                <p>Your {{ instance.organization.name }} Team</p>
+            </div>
+        </div>
+    </body>
+</html>

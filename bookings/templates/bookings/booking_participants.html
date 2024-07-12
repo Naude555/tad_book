@@ -1,0 +1,66 @@
+{% extends "base/base.html" %}
+{% block content %}
+    <div class="flex justify-center mt-10">
+        <div class="w-full bg-gray-200 p-8 rounded-lg shadow-md">
+            <h1 class="text-center text-3xl font-semibold mb-6">{{ booking.bookable_asset.asset.organization.name }}</h1>
+            <div class="bg-white shadow-md rounded-lg p-6 mb-4">
+                <h2 class="text-2xl font-semibold mb-2">
+                    Booking Detail: {{ booking.bookable_asset.asset.name }} for {{ booking.bookable_asset.name }}
+                </h2>
+                <h3>Date: {{ booking.date }}</h3>
+                <h3>Time: {{ booking.start_time }} - {{ booking.end_time }}</h3>
+                <h3>Requested By: {{ booking.user.get_full_name }}</h3>
+                <h3>Status: {{ booking.status|title }}</h3>
+                <h3>Notes:</h3>
+                <h4>{{ booking.notes }}</h4>
+                <h2 class="text-2xl font-semibold mt-2 mb-2">Other Participants</h2>
+                <table class="table-auto border-collapse w-full mt-2">
+                    <thead class="bg-gray-800 text-white">
+                        <tr>
+                            <th class="px-4 py-2">Email</th>
+                            <th class="px-4 py-2">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="participant">
+                        {% for participant in participants %}
+                            {% include "bookings/partials/participant.html" %}
+                        {% endfor %}
+                    </tbody>
+                </table>
+                <div class="flex justify-between rounded-md shadow-sm mt-4">
+                    <a href="{% url 'bookings:homepage' organization_slug=booking.bookable_asset.asset.organization.slug %}"
+                       class="text-slate-800 hover:text-yellow-600 text-sm bg-white hover:bg-slate-100 border border-slate-200 rounded font-medium px-4 py-2 inline-flex space-x-1 items-center">
+                        <span>
+                            <svg xmlns="http://www.w3.org/2000/svg"
+                                 fill="none"
+                                 viewBox="0 0 24 24"
+                                 stroke-width="1.5"
+                                 stroke="currentColor"
+                                 class="w-5 h-5">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" />
+                            </svg>
+                        </span>
+                        <span class="hidden md:inline-block">Create a booking</span>
+                    </a>
+                    <button class="text-slate-800 hover:text-blue-600 text-sm bg-white hover:bg-slate-100 border border-slate-200 rounded font-medium px-4 py-2 inline-flex space-x-1 items-center"
+                            hx-get='{% url "bookings:booking_participant_add" booking_id=booking.id %}'
+                            hx-trigger='load, click'
+                            hx-target='#participant'
+                            hx-swap="beforeend">
+                        <span>
+                            <svg xmlns="http://www.w3.org/2000/svg"
+                                 fill="none"
+                                 viewBox="0 0 24 24"
+                                 stroke-width="1.5"
+                                 stroke="currentColor"
+                                 class="size-6">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M18 7.5v3m0 0v3m0-3h3m-3 0h-3m-2.25-4.125a3.375 3.375 0 1 1-6.75 0 3.375 3.375 0 0 1 6.75 0ZM3 19.235v-.11a6.375 6.375 0 0 1 12.75 0v.109A12.318 12.318 0 0 1 9.374 21c-2.331 0-4.512-.645-6.374-1.766Z" />
+                            </svg>
+                        </span>
+                        <span class="hidden md:inline-block">Add Participant</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock content %}

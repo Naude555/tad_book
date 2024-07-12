@@ -1,0 +1,104 @@
+<div id="full_calendar" class="p-4 rounded-lg">
+    <div class="flex justify-between items-center">
+        <div id="current-month" class="text-2xl font-semibold mb-2">{{ monthYear }}</div>
+        <div class="text-green-500 hidden" data-activity-indicator="">
+            <div class="spinner-border spinner-border-sm"></div>
+            <span>Loading...</span>
+        </div>
+        <div>
+            <div class="inline-flex" role="group" aria-label="Button group">
+                <button class="h-10 px-3 text-gray-100 transition-colors duration-150 bg-gray-700 rounded-l-lg focus:shadow-outline hover:bg-gray-800"
+                        type="button"
+                        hx-get="{% url 'bookings:previous_month' %}?currentMonth={{ currentMonth }}&currentYear={{ currentYear }}"
+                        hx-target="#full_calendar"
+                        hx-swap="outerHTML"
+                        title="Previous Month">
+                    <svg xmlns="http://www.w3.org/2000/svg"
+                         width="16"
+                         height="16"
+                         fill="currentColor"
+                         class="bi bi-skip-backward"
+                         viewBox="0 0 16 16">
+                        <path d="M.5 3.5A.5.5 0 0 1 1 4v3.248l6.267-3.636c.52-.302 1.233.043 1.233.696v2.94l6.267-3.636c.52-.302 1.233.043 1.233.696v7.384c0 .653-.713.998-1.233.696L8.5 8.752v2.94c0 .653-.713.998-1.233.696L1 8.752V12a.5.5 0 0 1-1 0V4a.5.5 0 0 1 .5-.5m7 1.133L1.696 8 7.5 11.367zm7.5 0L9.196 8 15 11.367z" />
+                    </svg>
+                </button>
+                {% with today=current_date|date:"Y-m-d" %}
+                    <button class="h-10 px-5 text-gray-100 transition-colors duration-150 bg-gray-700 focus:shadow-outline hover:bg-gray-800"
+                            type="button"
+                            hx-get="{% url 'bookings:today' %}"
+                            hx-target="#full_calendar"
+                            hx-swap="outerHTML"
+                            hx-include="[name='asset'], [name='selected_date'], [name='bookable_asset']"
+                            title="{{ today }}">Today</button>
+                {% endwith %}
+                <button class="h-10 px-3 text-gray-100 transition-colors duration-150 bg-gray-700 rounded-r-lg focus:shadow-outline hover:bg-gray-800"
+                        type="button"
+                        hx-get="{% url 'bookings:next_month' %}?currentMonth={{ currentMonth }}&currentYear={{ currentYear }}"
+                        hx-target="#full_calendar"
+                        hx-swap="outerHTML"
+                        title="Next Month">
+                    <svg xmlns="http://www.w3.org/2000/svg"
+                         width="16"
+                         height="16"
+                         fill="currentColor"
+                         class="bi bi-skip-forward"
+                         viewBox="0 0 16 16">
+                        <path d="M15.5 3.5a.5.5 0 0 1 .5.5v8a.5.5 0 0 1-1 0V8.752l-6.267 3.636c-.52.302-1.233-.043-1.233-.696v-2.94l-6.267 3.636C.713 12.69 0 12.345 0 11.692V4.308c0-.653.713-.998 1.233-.696L7.5 7.248v-2.94c0-.653.713-.998 1.233-.696L15 7.248V4a.5.5 0 0 1 .5-.5M1 4.633v6.734L6.804 8zm7.5 0v6.734L14.304 8z" />
+                    </svg>
+                </button>
+            </div>
+        </div>
+    </div>
+    <table class="table-auto table-fixed border-collapse w-full mt-2"
+           id="calendar">
+        <thead class="bg-gray-800 text-white">
+            <tr class="text-center">
+                {% for name in dayNames %}
+                    <th class="border border-white px-1"
+                        style="width: 14.2857%;
+                               white-space: nowrap;
+                               overflow: hidden;
+                               text-overflow: ellipsis"
+                        title="{{ name }}">{{ name }}</th>
+                {% endfor %}
+            </tr>
+        </thead>
+        <tbody>
+            {% for row in rows %}
+                <tr>
+                    {% for col in row %}
+                        <td id="date-{{ col }}-{{ currentMonth }}-{{ currentYear }}"
+                            class="relative border border-gray-300
+                                   {% if col == currentDay %}
+                                       bg-green-600
+                                   {% elif col < currentDay %}
+                                       bg-gray-400
+                                   {% endif %}"
+                            style="width: 14.2857%"
+                            hx-get="{% url 'bookings:time_slots' %}?selected_date={{ col }}-{{ currentMonth }}-{{ currentYear }}"
+                            hx-target="#time_slots"
+                            hx-include="[name='asset'], [name='bookable_asset']"
+                            hx-swap="outerHTML"
+                            hx-trigger="click">
+                            {% if col < currentDay %}
+                                <span class="relative z-10">
+                                    <svg xmlns="http://www.w3.org/2000/svg"
+                                         fill="none"
+                                         viewBox="0 0 24 24"
+                                         stroke-width="1.5"
+                                         stroke="currentColor"
+                                         class="w-6 h-6">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126ZM12 15.75h.007v.008H12v-.008Z" />
+                                    </svg>
+                                </span>
+                            {% endif %}
+                            <span class="relative z-10">{{ col }}</span>
+                            <div class="mt-2 h-16 overflow-y-auto relative z-10"
+                                 id="events-{{ col }}-{{ currentMonth }}-{{ currentYear }}"></div>
+                        </td>
+                    {% endfor %}
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>

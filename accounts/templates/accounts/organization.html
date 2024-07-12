@@ -1,0 +1,52 @@
+{% extends "base/base.html" %}
+{% block content %}
+  <div class="flex justify-center mt-10">
+    <div class="w-full bg-gray-200 p-8 rounded-lg shadow-md">
+      <h1 class="text-center text-3xl font-semibold mb-6">Organizations</h1>
+      <h2 class="text-2xl font-semibold mb-2">Organizations You Administer</h2>
+      <div class="flex justify-between items-center mb-2">
+        <!-- Existing "Create" button -->
+        {% if request.user.can_start_own_organizations %}
+          <div class="inline-flex items-center rounded-md shadow-sm">
+            <a href="{% url 'accounts:create_organization' %}"
+               class="text-slate-800 hover:text-green-600 text-sm bg-white hover:bg-slate-100 border border-slate-200 rounded font-medium px-4 py-2 inline-flex space-x-1 items-center">
+              <span>
+                <svg xmlns="http://www.w3.org/2000/svg"
+                     fill="none"
+                     viewBox="0 0 24 24"
+                     stroke-width="1.5"
+                     stroke="currentColor"
+                     class="size-6">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 16.875h3.375m0 0h3.375m-3.375 0V13.5m0 3.375v3.375M6 10.5h2.25a2.25 2.25 0 0 0 2.25-2.25V6a2.25 2.25 0 0 0-2.25-2.25H6A2.25 2.25 0 0 0 3.75 6v2.25A2.25 2.25 0 0 0 6 10.5Zm0 9.75h2.25A2.25 2.25 0 0 0 10.5 18v-2.25a2.25 2.25 0 0 0-2.25-2.25H6a2.25 2.25 0 0 0-2.25 2.25V18A2.25 2.25 0 0 0 6 20.25Zm9.75-9.75H18a2.25 2.25 0 0 0 2.25-2.25V6A2.25 2.25 0 0 0 18 3.75h-2.25A2.25 2.25 0 0 0 13.5 6v2.25a2.25 2.25 0 0 0 2.25 2.25Z" />
+                </svg>
+              </span>
+              <span class="hidden md:inline-block">Create</span>
+            </a>
+          </div>
+        {% endif %}
+        {% if 1 == 0 %}
+          <div class="inline-flex items-center rounded-md shadow-sm">
+            <a href="{% url 'accounts:organization_search' %}"
+               class="text-slate-800 hover:text-blue-600 text-sm bg-white hover:bg-slate-100 border border-slate-200 rounded font-medium px-4 py-2 inline-flex space-x-1 items-center">
+              <span>
+                <svg xmlns="http://www.w3.org/2000/svg"
+                     fill="none"
+                     viewBox="0 0 24 24"
+                     stroke-width="1.5"
+                     stroke="currentColor"
+                     class="size-6">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M12 5v14m7-7H5" />
+                </svg>
+              </span>
+              <span class="hidden md:inline-block">Search organizations</span>
+            </a>
+          </div>
+        {% endif %}
+      </div>
+      <div class="bg-white shadow-md rounded-lg p-6 mb-4">
+        {% include "accounts/partials/organization_table_admin.html" %}
+      </div>
+      <div id="member_pending_and_invite">{% include "accounts/partials/organization_membership_details_tables.html" %}</div>
+    </div>
+  </div>
+{% endblock content %}

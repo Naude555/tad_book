@@ -1,0 +1,46 @@
+<tr hx-target="this" hx-swap="outerHTML">
+    <td class="border px-4 py-2 overflow-hidden whitespace-normal">{{ booking.bookable_asset.asset.name }}</td>
+    <td class="border px-4 py-2 overflow-hidden whitespace-normal">{{ booking.bookable_asset.name }}</td>
+    <td class="border px-4 py-2 overflow-hidden whitespace-normal">{{ booking.user.first_name }}</td>
+    <td class="border px-4 py-2 overflow-hidden whitespace-normal">{{ booking.user.last_name }}</td>
+    <td class="border px-4 py-2 overflow-hidden whitespace-normal">{{ booking.date }}</td>
+    <td class="border px-4 py-2 overflow-hidden whitespace-normal">{{ booking.start_time }}</td>
+    <td class="border px-4 py-2 overflow-hidden whitespace-normal">{{ booking.end_time }}</td>
+    <td class="border px-4 py-2 overflow-hidden whitespace-normal">{{ booking.status|title }}</td>
+    <td class="border px-4 py-2">
+        {% if booking.status == "accepted" or booking.status == "pending" %}
+            <div class="flex flex-wrap gap-2">
+                <button hx-post="{% url "bookings:manage_booking_user_cancel" booking_id=booking.id %}"
+                        hx-trigger='confirm_cancel_booking'
+                        hx-target="closest tr"
+                        hx-swap="outerHTML swap:1s"
+                        onClick="Swal.fire({ title: 'Are you sure?', text: 'Cancel {{ booking.bookable_asset.asset.bookable_asset_name }}, {{ booking.bookable_asset.name }}?', footer:'{{ booking.date }} {{ booking.start_time }}-{{ booking.end_time }}', icon: 'warning', showCancelButton: true, confirmButtonColor: '#22C55E', cancelButtonColor: '#EF4444', confirmButtonText: 'Yes, Cancel!' }).then((result) => { if (result.isConfirmed) { htmx.trigger(this, 'confirm_cancel_booking'); Swal.fire({ title: 'Canceled!', timer: 2000, text: 'You Canceled  {{ booking.bookable_asset.asset.bookable_asset_name }}, {{ booking.bookable_asset.name }}', footer:'{{ booking.date }} {{ booking.start_time }}-{{ booking.end_time }}', icon: 'success' }); } });"
+                        class="text-slate-800 hover:text-red-600 text-sm bg-white hover:bg-slate-100 border border-slate-200 rounded-md font-medium px-2 py-1 flex items-center justify-center transition-all duration-300 ease-in-out group">
+                    <svg xmlns="http://www.w3.org/2000/svg"
+                         fill="none"
+                         viewBox="0 0 24 24"
+                         stroke-width="1.5"
+                         stroke="currentColor"
+                         class="size-6">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="m9.75 9.75 4.5 4.5m0-4.5-4.5 4.5M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+                    </svg>
+                    <span class="ml-2 hidden lg:inline-block group-hover:inline-block">Cancel</span>
+                </button>
+                <a href="{% url "bookings:booking_participants" booking_id=booking.id %}"
+                   class="text-slate-800 hover:text-green-600 text-sm bg-white hover:bg-slate-100 border border-slate-200 rounded-md font-medium px-2 py-1 flex items-center justify-center transition-all duration-300 ease-in-out group">
+                    <svg xmlns="http://www.w3.org/2000/svg"
+                         fill="none"
+                         viewBox="0 0 24 24"
+                         stroke-width="1.5"
+                         stroke="currentColor"
+                         class="size-5">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M18 7.5v3m0 0v3m0-3h3m-3 0h-3m-2.25-4.125a3.375 3.375 0 1 1-6.75 0 3.375 3.375 0 0 1 6.75 0ZM3 19.235v-.11a6.375 6.375 0 0 1 12.75 0v.109A12.318 12.318 0 0 1 9.374 21c-2.331 0-4.512-.645-6.374-1.766Z" />
+                    </svg>
+                    <span class="ml-2 hidden lg:inline-block group-hover:inline-block">Add Participants</span>
+                </a>
+            </div>
+        {% else %}
+            No Action Available
+        {% endif %}
+    </td>
+</tr>

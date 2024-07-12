@@ -1,0 +1,41 @@
+<div class="flex justify-between pl-5 mt-4 mb-4"
+     id="pending_member_organization_table">
+  <div class="overflow-x-auto">
+    <table class="table-auto table-fixed border-collapse lg:w-full min-w-full mt-2">
+      <thead class="bg-gray-800 text-white">
+        <tr class="text-center">
+          <th class="px-4 py-2">Organization Name</th>
+          <th class="px-4 py-2">Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for organization in pending_membership %}
+          <tr>
+            <td class="border px-4 py-2 overflow-hidden whitespace-normal">{{ organization.name }}</td>
+            <td class="border px-4 py-2">
+              <div class="flex flex-wrap gap-2">
+                <!-- Leave Organization Button -->
+                <button hx-delete="{% url 'accounts:organization_leave' organization_slug=organization.slug %}"
+                        hx-target="#member_pending_and_invite"
+                        hx-swap="outerHTML"
+                        hx-trigger='confirm_leave'
+                        onClick="Swal.fire({ title: 'Are you sure?', text: 'Leave Organization {{ organization.name }}?', icon: 'warning', showCancelButton: true, confirmButtonColor: '#22C55E', cancelButtonColor: '#EF4444', confirmButtonText: 'Yes, leave it!' }).then((result) => { if (result.isConfirmed) { htmx.trigger(this, 'confirm_leave'); Swal.fire({ title: 'Left!', timer: 2000, text: 'You left {{ organization.name }} .', icon: 'success' }); } });"
+                        class="text-slate-800 hover:text-red-600 text-sm bg-white hover:bg-slate-100 border border-slate-200 rounded-md font-medium px-2 py-1 flex items-center justify-center transition-all duration-300 ease-in-out group">
+                  <svg xmlns="http://www.w3.org/2000/svg"
+                       fill="none"
+                       viewBox="0 0 24 24"
+                       stroke-width="1.5"
+                       stroke="currentColor"
+                       class="w-5 h-5">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 9V5.25A2.25 2.25 0 0 1 10.5 3h6a2.25 2.25 0 0 1 2.25 2.25v13.5A2.25 2.25 0 0 1 16.5 21h-6a2.25 2.25 0 0 1-2.25-2.25V15m-3 0-3-3m0 0 3-3m-3 3H15" />
+                  </svg>
+                  <span class="ml-2 hidden sm:inline-block group-hover:inline-block">Leave Organization</span>
+                </button>
+              </div>
+            </td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>

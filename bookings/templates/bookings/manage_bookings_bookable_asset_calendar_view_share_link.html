@@ -1,0 +1,144 @@
+{% extends "base/base.html" %}
+{% load static %}
+{% block content %}
+    <style>
+        .box {
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            top: 0;
+            left: 0;
+            opacity: 0;
+            background: #000000;
+            z-index: -9;
+        }
+
+        .box2 {
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            top: 0;
+            left: 0;
+            opacity: 1;
+            background: #000000;
+            z-index: 2;
+        }
+
+        #screensaver {
+            z-index: 0;
+        }
+    </style>
+    <div id="main" class="flex justify-center">
+        <div class="w-full bg-gray-200 p-8 rounded-lg shadow-md">
+            <h1 class="text-center text-3xl font-semibold mb-6">{{ bookable_asset.name }}</h1>
+            <div id="manage_bookings_organization">{% include "bookings/partials/all_bookings_day_view.html" %}</div>
+        </div>
+    </div>
+    <div id="screensaver"
+         style="position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background-color: black;
+                display: none">
+        <canvas id="tv-screen"></canvas>
+        <button type="button"
+                class="text-white bg-black hover:bg-blue-700 rounded-lg"
+                style="width: 110%;
+                       heigh: 10%"
+                onclick="declareRefresh()">Wake up</button>
+    </div>
+{% endblock content %}
+{% block script %}
+    <script>
+        $("#nav").hide()
+
+        function declareRefresh() {
+            window.location.href = "{% url 'bookings:manage_bookings_bookable_asset_calendar_view_share_link' bookable_asset_slug=bookable_asset.slug %}";
+        }
+    </script>
+    <script src="{% static '/js/screensaver/adapter.js' %}"></script>
+    <script src="{% static '/js/screensaver/diff-cam-engine.js' %}"></script>
+    <script>
+        var scale = 10; // capture resolution over motion resolution
+        var isActivated = false;
+        var isTargetInSight = false;
+        var lostTimeout;
+
+        function initSuccess() {
+            DiffCamEngine.start();
+            console.log("Engine started");
+        }
+
+        function initError() {
+            alert('Something went wrong.');
+        }
+
+        function startComplete() {
+            setTimeout(activate, 500);
+            console.log("Start complete")
+        }
+
+        function activate() {
+            isActivated = true;
+
+            $("#main").show()
+
+            $("#screensaver").hide()
+            lostTimeout = setTimeout(declareLost, 30000);
+        }
+
+        function capture(payload) {
+
+            if (!isActivated) {
+                return;
+            }
+
+            var box = payload.hasMotion;
+            if (box) {
+                console.log("Has motion " + payload.score)
+
+
+
+                if (!isTargetInSight) {
+                    isTargetInSight = true;
+
+                    if (!$("#main").is(":visible") || $("#screensaver").is(":visible")) {
+                        window.location.href = "{% url 'bookings:manage_bookings_bookable_asset_calendar_view_share_link' bookable_asset_slug=bookable_asset.slug %}";
+                    }
+
+                    $("#main").show();
+                    $("#screensaver").hide();
+                }
+
+
+                clearTimeout(lostTimeout);
+                lostTimeout = setTimeout(declareLost, 30000);
+            }
+
+
+        }
+
+        function declareLost() {
+            console.log("declare lost")
+            isTargetInSight = false;
+            $("#main").hide()
+            $("#nav").hide()
+            $("#screensaver").show()
+        }
+
+
+        DiffCamEngine.init({
+            video: document.getElementById('video'),
+            captureIntervalTime: 500,
+            includeMotionBox: false,
+            includeMotionPixels: false,
+            initSuccessCallback: initSuccess,
+            initErrorCallback: initError,
+            startCompleteCallback: startComplete,
+            captureCallback: capture
+        });
+    </script>
+    <script src="{% static '/js/screensaver/screensaver.js' %}"></script>
+{% endblock script %}

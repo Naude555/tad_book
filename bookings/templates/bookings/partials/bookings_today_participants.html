@@ -1,0 +1,40 @@
+<div id="today_bookings_participants" class="flex justify-center">
+    {% if grouped_data %}
+        <div class="w-full bg-gray-200 rounded-lg shadow-md">
+            {% for organization, assets in grouped_data.items %}
+                <div class="organization-section bg-white shadow-md rounded-lg p-6 mb-4">
+                    <div class="flex items-center justify-between mb-2">
+                        <h2 class="text-2xl font-semibold">{{ organization.name }}</h2>
+                    </div>
+                    {% for asset, bookable_assets in assets.items %}
+                        <div class="asset-section bg-gray-100 shadow-md rounded-lg p-4 mb-2">
+                            <h3 class="text-xl font-semibold mb-2">{{ asset.name }}</h3>
+                            {% for bookable_asset, bookings in bookable_assets.items %}
+                                <div class="bookable-asset-section bg-gray-200 shadow-md rounded-lg p-2 mb-2">
+                                    <h4 class="text-lg font-semibold mb-2">{{ bookable_asset.name }}</h4>
+                                    <table class="table-auto table-fixed border-collapse w-full mt-2">
+                                        <thead class="bg-gray-800 text-white">
+                                            <tr>
+                                                <th class="px-4 py-2">Date</th>
+                                                <th class="px-4 py-2">Start Time</th>
+                                                <th class="px-4 py-2">End Time</th>
+                                                <th class="px-4 py-2">Status</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="booking">
+                                            {% for booking in bookings %}
+                                                {% include "bookings/partials/booking_today.html" %}
+                                            {% endfor %}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    {% endfor %}
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <h2 class="text-2xl font-semibold">No Bookings You are invited to</h2>
+    {% endif %}
+</div>

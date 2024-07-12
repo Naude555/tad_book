@@ -1,0 +1,75 @@
+{% extends "base/base.html" %}
+{% block content %}
+    <div class="flex justify-center mt-10">
+        <div class="w-full bg-gray-200 p-8 rounded-lg shadow-md">
+            <h1 class="text-center text-3xl font-semibold mb-6">{{ organization.name }}</h1>
+            <div class="bg-white shadow-md rounded-lg p-6 mb-4">
+                <h2 class="text-2xl font-semibold mb-2">{{ asset.bookable_asset_name }} bookable hours</h2>
+                <table class="table-auto table-fixed border-collapse w-full mt-2">
+                    <thead class="bg-gray-800 text-white">
+                        <tr>
+                            <th class="px-4 py-2">Day</th>
+                            <th class="px-4 py-2">Start Time</th>
+                            <th class="px-4 py-2">End Time</th>
+                            <th class="px-4 py-2">Active</th>
+                            <th class="px-4 py-2">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="bookable_hours">
+                        {% for bookable_hour in bookable_hours %}
+                            {% include "accounts/partials/bookable_hour.html" %}
+                        {% endfor %}
+                    </tbody>
+                </table>
+                <h2 class="text-2xl font-semibold mt-2 mb-2">Upcoming No Bookings Days</h2>
+                <table class="table-auto table-fixed border-collapse w-full mt-2">
+                    <thead class="bg-gray-800 text-white">
+                        <tr>
+                            <th class="px-4 py-2">Start Date</th>
+                            <th class="px-4 py-2">End Date</th>
+                            <th class="px-4 py-2">Description</th>
+                            <th class="px-4 py-2">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="no_bookings">
+                        {% for no_booking in no_bookings %}
+                            {% include "accounts/partials/no_booking_day.html" %}
+                        {% endfor %}
+                    </tbody>
+                </table>
+                <div class="flex justify-between rounded-md shadow-sm mt-4">
+                    <a href="{% url 'accounts:organization_detail' organization_slug=organization.slug %}"
+                       class="text-slate-800 hover:text-yellow-600 text-sm bg-white hover:bg-slate-100 border border-slate-200 rounded font-medium px-4 py-2 inline-flex space-x-1 items-center">
+                        <span>
+                            <svg xmlns="http://www.w3.org/2000/svg"
+                                 fill="none"
+                                 viewBox="0 0 24 24"
+                                 stroke-width="1.5"
+                                 stroke="currentColor"
+                                 class="w-5 h-5">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" />
+                            </svg>
+                        </span>
+                        <span class="hidden md:inline-block">Back</span>
+                    </a>
+                    <button class="text-slate-800 hover:text-blue-600 text-sm bg-white hover:bg-slate-100 border border-slate-200 rounded font-medium px-4 py-2 inline-flex space-x-1 items-center"
+                            hx-get='{% url "accounts:no_booking_add" asset_id=asset.id %}'
+                            hx-target='#no_bookings'
+                            hx-swap="beforeend">
+                        <span>
+                            <svg xmlns="http://www.w3.org/2000/svg"
+                                 fill="none"
+                                 viewBox="0 0 24 24"
+                                 stroke-width="1.5"
+                                 stroke="currentColor"
+                                 class="size-6">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 0 0-3.375-3.375h-1.5A1.125 1.125 0 0 1 13.5 7.125v-1.5a3.375 3.375 0 0 0-3.375-3.375H8.25m3.75 9v6m3-3H9m1.5-12H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 0 0-9-9Z" />
+                            </svg>
+                        </span>
+                        <span class="hidden md:inline-block">Add No Booking Day</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock content %}

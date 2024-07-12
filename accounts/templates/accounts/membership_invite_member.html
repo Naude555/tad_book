@@ -1,0 +1,60 @@
+{% extends "base/base.html" %}
+{% load widget_tweaks %}
+{% block content %}
+  <div class="flex justify-center mt-10">
+    <div class="w-full max-w-2xl bg-gray-200 p-8 rounded-lg shadow-md">
+      <h1 class="text-3xl font-semibold mb-4">Invite Member To: {{ organization.name }}</h1>
+      <form method="post" action="">
+        {% csrf_token %}
+        <div class="mb-4">
+          <label for="{{ form.email.id_for_label }}"
+                 class="block text-lg font-medium text-gray-700">{{ form.email.label_tag }}</label>
+          {% render_field form.email class="text-md block px-3 py-2  rounded-lg w-full bg-white border-2 border-gray-300 placeholder-gray-600 shadow-md focus:placeholder-gray-500 focus:bg-white focus:border-gray-600 focus:outline-none" placeholder="Enter email" %}
+        </div>
+        <div class="mb-4">
+          <label for="{{ form.first_name.id_for_label }}"
+                 class="block text-lg font-medium text-gray-700">{{ form.first_name.label_tag }}</label>
+          <span class="block text-sm font-medium text-red-700">{{ form.first_name.errors }}</span>
+          {% render_field form.first_name class="text-md block px-3 py-2  rounded-lg w-full bg-white border-2 border-gray-300 placeholder-gray-600 shadow-md focus:placeholder-gray-500 focus:bg-white focus:border-gray-600 focus:outline-none" placeholder="First Name" %}
+        </div>
+        <div class="mb-4">
+          <label for="{{ form.last_name.id_for_label }}"
+                 class="block text-lg font-medium text-gray-700">{{ form.last_name.label_tag }}</label>
+          <span class="block text-sm font-medium text-red-700">{{ form.last_name.errors }}</span>
+          {% render_field form.last_name class="text-md block px-3 py-2  rounded-lg w-full bg-white border-2 border-gray-300 placeholder-gray-600 shadow-md focus:placeholder-gray-500 focus:bg-white focus:border-gray-600 focus:outline-none" placeholder="Last Name" %}
+        </div>
+        <!-- Add any other fields you want for creating an organization -->
+        <div class="flex justify-between">
+          <button type="submit"
+                  class="text-slate-800 hover:text-green-600 text-sm bg-white hover:bg-slate-100 border border-slate-200 rounded font-medium px-4 py-2 inline-flex space-x-1 items-center">
+            <span>
+              <svg xmlns="http://www.w3.org/2000/svg"
+                   fill="none"
+                   viewBox="0 0 24 24"
+                   stroke-width="1.5"
+                   stroke="currentColor"
+                   class="size-6">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M18 7.5v3m0 0v3m0-3h3m-3 0h-3m-2.25-4.125a3.375 3.375 0 1 1-6.75 0 3.375 3.375 0 0 1 6.75 0ZM3 19.235v-.11a6.375 6.375 0 0 1 12.75 0v.109A12.318 12.318 0 0 1 9.374 21c-2.331 0-4.512-.645-6.374-1.766Z" />
+              </svg>
+            </span>
+            <span class="hidden md:inline-block">Invite</span>
+          </button>
+          <a href="{% url 'accounts:organization_detail' organization_slug=organization.slug %}"
+             class="text-slate-800 hover:text-yellow-600 text-sm bg-white hover:bg-slate-100 border border-slate-200 rounded font-medium px-4 py-2 inline-flex space-x-1 items-center">
+            <span>
+              <svg xmlns="http://www.w3.org/2000/svg"
+                   fill="none"
+                   viewBox="0 0 24 24"
+                   stroke-width="1.5"
+                   stroke="currentColor"
+                   class="w-5 h-5">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" />
+              </svg>
+            </span>
+            <span class="hidden md:inline-block">Back</span>
+          </a>
+        </div>
+      </form>
+    </div>
+  </div>
+{% endblock content %}

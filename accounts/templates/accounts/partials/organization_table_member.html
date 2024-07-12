@@ -1,0 +1,57 @@
+<div class="flex justify-between mb-4" id="member_organization_table">
+  <div class="overflow-x-auto">
+    {% if accepted_membership %}
+      <table class="table-auto table-fixed border-collapse lg:w-full min-w-full mt-2">
+        <thead class="bg-gray-800 text-white">
+          <tr class="text-center">
+            <th class="px-4 py-2">Organization Name</th>
+            <th class="px-4 py-2">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for organization in accepted_membership %}
+            <tr>
+              <td class="border px-4 py-2 overflow-hidden whitespace-normal">{{ organization.name }}</td>
+              <td class="border px-4 py-2">
+                <div class="flex flex-wrap gap-2">
+                  <!-- Homepage Link Button -->
+                  <a href="{% url 'bookings:homepage' organization_slug=organization.slug %}"
+                     class="text-slate-800 hover:text-orange-600 text-sm bg-white hover:bg-slate-100 border border-slate-200 rounded-md font-medium px-2 py-1 flex items-center justify-center transition-all duration-300 ease-in-out group">
+                    <svg xmlns="http://www.w3.org/2000/svg"
+                         fill="none"
+                         viewBox="0 0 24 24"
+                         stroke-width="1.5"
+                         stroke="currentColor"
+                         class="w-5 h-5">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 0 1 2.25-2.25h13.5A2.25 2.25 0 0 1 21 7.5v11.25m-18 0A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75m-18 0v-7.5A2.25 2.25 0 0 1 5.25 9h13.5A2.25 2.25 0 0 1 21 11.25v7.5m-9-6h.008v.008H12v-.008ZM12 15h.008v.008H12V15Zm0 2.25h.008v.008H12v-.008ZM9.75 15h.008v.008H9.75V15Zm0 2.25h.008v.008H9.75v-.008ZM7.5 15h.008v.008H7.5V15Zm0 2.25h.008v.008H7.5v-.008Zm6.75-4.5h.008v.008h-.008v-.008Zm0 2.25h.008v.008h-.008V15Zm0 2.25h.008v.008h-.008v-.008Zm2.25-4.5h.008v.008H16.5v-.008Zm0 2.25h.008v.008H16.5V15Z" />
+                    </svg>
+                    <span class="ml-2 hidden sm:inline-block group-hover:inline-block">Make a Booking</span>
+                  </a>
+                  <!-- Leave Organization Button -->
+                  <button hx-delete="{% url 'accounts:organization_leave' organization_slug=organization.slug %}"
+                          hx-target="#member_organization_table"
+                          hx-swap="outerHTML"
+                          hx-trigger='confirm_leave_membership'
+                          onClick="Swal.fire({ title: 'Are you sure?', text: 'Leave Organization {{ organization.name }}?', icon: 'warning', showCancelButton: true, confirmButtonColor: '#22C55E', cancelButtonColor: '#EF4444', confirmButtonText: 'Yes, leave it!' }).then((result) => { if (result.isConfirmed) { htmx.trigger(this, 'confirm_leave_membership'); Swal.fire({ title: 'Left!', timer: 2000, text: 'You left {{ organization.name }} .', icon: 'success' }); } });"
+                          class="text-slate-800 hover:text-red-600 text-sm bg-white hover:bg-slate-100 border border-slate-200 rounded-md font-medium px-2 py-1 flex items-center justify-center transition-all duration-300 ease-in-out group">
+                    <svg xmlns="http://www.w3.org/2000/svg"
+                         fill="none"
+                         viewBox="0 0 24 24"
+                         stroke-width="1.5"
+                         stroke="currentColor"
+                         class="w-5 h-5">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 9V5.25A2.25 2.25 0 0 1 10.5 3h6a2.25 2.25 0 0 1 2.25 2.25v13.5A2.25 2.25 0 0 1 16.5 21h-6a2.25 2.25 0 0 1-2.25-2.25V15m-3 0-3-3m0 0 3-3m-3 3H15" />
+                    </svg>
+                    <span class="ml-2 hidden sm:inline-block group-hover:inline-block">Leave</span>
+                  </button>
+                </div>
+              </td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    {% else %}
+      <h6 class="text-l font-semibold mb-0">You are not a member of any organizations.</h6>
+    {% endif %}
+  </div>
+</div>

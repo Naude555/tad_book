@@ -1,0 +1,47 @@
+version: "3.7"
+
+services:
+  redis:
+    image: redis:7.0.11-alpine
+    restart: always
+
+  tad_book:
+    container_name: tad_book
+    build:
+      context: .
+    command: /code/entrypoint.sh
+    volumes:
+      - .:/code
+    ports:
+      - "8874:8000"
+    environment:
+      - DJANGO_SETTINGS_MODULE=config.settings.production
+    depends_on:
+      - redis
+    restart: always
+
+  celery:
+    build:
+      context: .
+    command: /code/celery_entrypoint.sh
+    volumes:
+      - .:/code
+    environment:
+      - DJANGO_SETTINGS_MODULE=config.settings.production
+    depends_on:
+      - redis
+      - tad_book
+    restart: always
+
+  celery-beat:
+    build: 
+      context: .
+    command: celery -A config beat -l info
+    volumes:
+      - .:/code
+    environment:
+      - DJANGO_SETTINGS_MODULE=config.settings.production
+    depends_on:
+      - redis
+      - tad_book
+    restart: always

@@ -1,0 +1,20 @@
+<div class="flex justify-between pl-5 mt-4 mb-4">
+    <div class="overflow-x-auto">
+        <table class="table-auto table-fixed border-collapse lg:w-full min-w-full mt-2">
+            <thead class="bg-gray-800 text-white">
+                <tr class="text-center">
+                    <th class="px-4 py-2">First Name</th>
+                    <th class="px-4 py-2">Last Name</th>
+                    <th class="px-4 py-2">Role</th>
+                    <th class="px-4 py-2">Status</th>
+                    <th class="px-4 py-2">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for membership in memberships %}
+                    {% include "accounts/partials/member.html" %}
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>

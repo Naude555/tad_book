@@ -1,0 +1,23 @@
+<tr hx-target="this" hx-swap="outerHTML">
+    <td class="border px-4 py-2 overflow-hidden whitespace-normal">{{ participant.email }}</td>
+    <td class="border px-4 py-2">
+        <div class="flex flex-wrap gap-2">
+            {% if request.user == booking.user or request.user.email == participant.email or admin_view %}
+                <button hx-post="{% url 'bookings:booking_participant_remove' booking_id=booking.id user_id=participant.id %}"
+                        hx-trigger='confirm_remove_participant'
+                        onClick="Swal.fire({ title: 'Are you sure?', text: 'Remove participant {{ participant.email }}?', icon: 'warning', showCancelButton: true, confirmButtonColor: '#22C55E', cancelButtonColor: '#EF4444', confirmButtonText: 'Yes, Remove!' }).then((result) => { if (result.isConfirmed) { htmx.trigger(this, 'confirm_remove_participant'); Swal.fire({ title: 'Removed!', timer: 2000, text: 'You Removed {{ participant.email }} .', icon: 'success' }); } });"
+                        class="text-slate-800 hover:text-red-600 text-sm bg-white hover:bg-slate-100 border border-slate-200 rounded-md font-medium px-2 py-1 flex items-center justify-center transition-all duration-300 ease-in-out group">
+                    <svg xmlns="http://www.w3.org/2000/svg"
+                         fill="none"
+                         viewBox="0 0 24 24"
+                         stroke-width="1.5"
+                         stroke="currentColor"
+                         class="size-6">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M22 10.5h-6m-2.25-4.125a3.375 3.375 0 1 1-6.75 0 3.375 3.375 0 0 1 6.75 0ZM4 19.235v-.11a6.375 6.375 0 0 1 12.75 0v.109A12.318 12.318 0 0 1 10.374 21c-2.331 0-4.512-.645-6.374-1.766Z" />
+                    </svg>
+                    <span class="ml-2 hidden lg:inline-block group-hover:inline-block">Remove</span>
+                </button>
+            {% endif %}
+        </div>
+    </td>
+</tr>

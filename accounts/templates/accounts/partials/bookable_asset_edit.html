@@ -1,0 +1,66 @@
+<tr id="bookable_assets_form_{{ bookable_asset.id }}"
+    hx-target="this"
+    hx-swap="outerHTML">
+    <td class="border px-4 py-2 overflow-hidden whitespace-normal">
+        <input type="text"
+               class="text-md block px-3 py-2  rounded-lg w-full bg-white border-2 border-gray-300 placeholder-gray-600 shadow-md focus:placeholder-gray-500 focus:bg-white focus:border-gray-600 focus:outline-none
+                      {% if form.name.errors %}border-red-500{% endif %}"
+               id="id_name"
+               name="name"
+               placeholder="Name"
+               autofocus='True'
+               {% if form.name.value %}value="{{ form.name.value }}"{% endif %} />
+    </td>
+    <td class="border px-4 py-2 overflow-hidden whitespace-normal">
+        <input type="color"
+               name="calendar_colour"
+               id="id_calendar_colour"
+               required
+               class="p-1 h-12 w-14 block text-md block px-3 py-2  rounded-lg w-full bg-white border-2 border-gray-300 placeholder-gray-600 shadow-md focus:placeholder-gray-500 focus:bg-white focus:border-gray-600"
+               value="{{ form.calendar_colour.value }}" />
+    </td>
+    <td class="border px-4 py-2 overflow-hidden whitespace-normal">
+        <label class="inline-flex items-center me-5 cursor-pointer">
+            <input name="share_link"
+                   id="id_share_link"
+                   type="checkbox"
+                   class="sr-only peer"
+                   {% if form.share_link.value == True %}checked{% endif %} />
+            <div class="relative w-11 h-6 bg-gray-200 rounded-full peer dark:bg-gray-700 peer-focus:ring-4 peer-focus:ring-green-300 dark:peer-focus:ring-green-800 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-green-600">
+            </div>
+        </label>
+    </td>
+    <td class="border px-4 py-2 overflow-hidden whitespace-normal">
+        <div class="flex flex-wrap gap-2">
+            <button type="submit"
+                    id="submit-{{ bookable_asset.id }}"
+                    hx-post="{% url 'accounts:bookable_asset_edit' bookable_asset_id=bookable_asset.id %}"
+                    hx-include="closest tr"
+                    class="text-slate-800 hover:text-red-600 text-sm bg-white hover:bg-slate-100 border border-slate-200 rounded-md font-medium px-2 py-1 flex items-center justify-center transition-all duration-300 ease-in-out group">
+                <svg xmlns="http://www.w3.org/2000/svg"
+                     fill="none"
+                     viewBox="0 0 24 24"
+                     stroke-width="1.5"
+                     stroke="currentColor"
+                     class="size-6">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="m9.75 9.75 4.5 4.5m0-4.5-4.5 4.5M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+                </svg>
+                <span class="ml-2 hidden sm:inline-block group-hover:inline-block">Submit</span>
+            </button>
+            <button type="button"
+                    hx-get="{% url 'accounts:bookable_asset_get' bookable_asset_id=bookable_asset.id %}"
+                    class="text-slate-800 hover:text-red-600 text-sm bg-white hover:bg-slate-100 border border-slate-200 rounded-md font-medium px-2 py-1 flex items-center justify-center transition-all duration-300 ease-in-out group">
+                <svg xmlns="http://www.w3.org/2000/svg"
+                     fill="none"
+                     viewBox="0 0 24 24"
+                     stroke-width="1.5"
+                     stroke="currentColor"
+                     class="size-6">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="m9.75 9.75 4.5 4.5m0-4.5-4.5 4.5M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+                </svg>
+                <span class="ml-2 hidden sm:inline-block group-hover:inline-block">Cancel</span>
+            </button>
+            {% if form.name.errors %}<i class="text-red-500">{{ form.name.errors }}</i>{% endif %}
+        </div>
+    </td>
+</tr>

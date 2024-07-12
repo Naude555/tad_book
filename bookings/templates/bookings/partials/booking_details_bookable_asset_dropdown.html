@@ -1,0 +1,28 @@
+{% if bookable_assets %}
+    <label class="text-lg font-semibold mb-2" for="bookable_asset">{{ asset.bookable_asset_name }}</label>
+    <select id="bookable_asset"
+            name="bookable_asset"
+            hx-get="{% url 'bookings:time_slots' %}"
+            hx-target="#time_slots"
+            hx-swap="outerHTML"
+            hx-include="[name='asset'], [name='selected_date']"
+            class="w-full p-2 border border-gray-300 rounded-md">
+        <option value="" disabled selected>-- Please Choose --</option>
+        {% for bookable_asset in bookable_assets %}
+            <option value="{{ bookable_asset.id }}">{{ bookable_asset.name }}</option>
+        {% endfor %}
+    </select>
+{% endif %}
+<div id="booking_details" class="mb-4" hx-swap-oob="true">
+    <div class="text-lg font-semibold mb-2">Description</div>
+    <hr class="border-t border-gray-300 mb-4" />
+    <div id="booking_details_description">
+        <div>
+            <p class="text-gray-700 font-semibold">{{ asset.description }}</p>
+        </div>
+    </div>
+</div>
+<ul id="slot-list"
+    hx-swap-oob="true"
+    class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+</ul>

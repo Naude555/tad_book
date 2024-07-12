@@ -1,0 +1,120 @@
+{% extends "base/base.html" %}
+{% load widget_tweaks %}
+{% block content %}
+    <div class="flex justify-center mt-10">
+        <div class="w-full max-w-2xl bg-gray-200 p-8 rounded-lg shadow-md">
+            <h1 class="text-2xl font-semibold mb-2">
+                Booking Detail: {{ booking.bookable_asset.asset.name }} for {{ booking.bookable_asset.name }}
+            </h1>
+            <div class="w-full max-w-2xl bg-gray-200 p-8 rounded-lg shadow-md">
+                <table class="table-auto border-collapse w-full">
+                    <tbody>
+                        <tr>
+                            <th class="text-left px-4 py-2">Organization:</th>
+                            <td class="px-4 py-2">{{ booking.bookable_asset.asset.organization.name }}</td>
+                        </tr>
+                        <tr>
+                            <th class="text-left px-4 py-2">{{ booking.bookable_asset.asset.organization.asset_name }}:</th>
+                            <td class="px-4 py-2">{{ booking.bookable_asset.asset.name }}</td>
+                        </tr>
+                        <tr>
+                            <th class="text-left px-4 py-2">{{ booking.bookable_asset.asset.bookable_asset_name }}:</th>
+                            <td class="px-4 py-2">{{ booking.bookable_asset.name }}</td>
+                        </tr>
+                        <tr>
+                            <th class="text-left px-4 py-2">Date:</th>
+                            <td class="px-4 py-2">{{ booking.date }}</td>
+                        </tr>
+                        <tr>
+                            <th class="text-left px-4 py-2">Time:</th>
+                            <td class="px-4 py-2">{{ booking.start_time }} - {{ booking.end_time }}</td>
+                        </tr>
+                        <tr>
+                            <th class="text-left px-4 py-2">Requested By:</th>
+                            <td class="px-4 py-2">{{ booking.user.get_full_name }}</td>
+                        </tr>
+                        {% if booking.notes %}
+                            <tr>
+                                <th class="text-left px-4 py-2">Notes:</th>
+                                <td class="px-4 py-2">{{ booking.notes }}</td>
+                            </tr>
+                        {% endif %}
+                    </tbody>
+                </table>
+                <h2 class="text-2xl font-semibold mt-2 mb-2">Other Participants</h2>
+                <table class="table-auto border-collapse w-full mt-2">
+                    <thead class="bg-gray-800 text-white">
+                        <tr>
+                            <th class="px-4 py-2">Email</th>
+                            <th class="px-4 py-2">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="participant">
+                        {% for participant in participants %}
+                            {% include "bookings/partials/participant.html" %}
+                        {% endfor %}
+                    </tbody>
+                </table>
+                {% if request.user == booking.user %}
+                    {% if booking.status == "accepted" or booking.status == "pending" %}
+                        <button class="text-slate-800 hover:text-blue-600 text-sm bg-white hover:bg-slate-100 border border-slate-200 rounded font-medium px-4 py-2 inline-flex space-x-1 items-center"
+                                hx-get='{% url "bookings:booking_participant_add" booking_id=booking.id %}'
+                                hx-trigger='load, click'
+                                hx-target='#participant'
+                                hx-swap="beforeend">
+                            <span>
+                                <svg xmlns="http://www.w3.org/2000/svg"
+                                     fill="none"
+                                     viewBox="0 0 24 24"
+                                     stroke-width="1.5"
+                                     stroke="currentColor"
+                                     class="size-6">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M18 7.5v3m0 0v3m0-3h3m-3 0h-3m-2.25-4.125a3.375 3.375 0 1 1-6.75 0 3.375 3.375 0 0 1 6.75 0ZM3 19.235v-.11a6.375 6.375 0 0 1 12.75 0v.109A12.318 12.318 0 0 1 9.374 21c-2.331 0-4.512-.645-6.374-1.766Z" />
+                                </svg>
+                            </span>
+                            <span class="hidden md:inline-block">Add Participant</span>
+                        </button>
+                    {% endif %}
+                {% endif %}
+                <h3 class="text-xl font-semibold mt-4">Booking Status: {{ booking.status|title }}</h3>
+            </div>
+            <!-- Add any other fields you want for creating an organization -->
+            <div class="flex items-center justify-between rounded-md  mb-2">
+                <a href="{% url 'accounts:profile' %}"
+                   class="text-slate-800 hover:text-yellow-600 text-sm bg-white hover:bg-slate-100 border border-slate-200 rounded font-medium px-4 py-2 inline-flex space-x-1 items-center">
+                    <span>
+                        <svg xmlns="http://www.w3.org/2000/svg"
+                             fill="none"
+                             viewBox="0 0 24 24"
+                             stroke-width="1.5"
+                             stroke="currentColor"
+                             class="w-5 h-5">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" />
+                        </svg>
+                    </span>
+                    <span class="hidden md:inline-block">My Profile</span>
+                </a>
+                {% if booking.user == request.user %}
+                    {% if booking.status == "accepted" or booking.status == "pending" %}
+                        <button hx-post="{% url "bookings:manage_booking_user_cancel" booking_id=booking.id %}"
+                                hx-trigger='confirm_cancel_booking'
+                                hx-target="closest tr"
+                                hx-swap="outerHTML swap:1s"
+                                onClick="Swal.fire({ title: 'Are you sure?', text: 'Cancel {{ booking.bookable_asset.asset.bookable_asset_name }}, {{ booking.bookable_asset.name }}?', footer:'{{ booking.date }} {{ booking.start_time }}-{{ booking.end_time }}', icon: 'warning', showCancelButton: true, confirmButtonColor: '#22C55E', cancelButtonColor: '#EF4444', confirmButtonText: 'Yes, Cancel!' }).then((result) => { if (result.isConfirmed) { htmx.trigger(this, 'confirm_cancel_booking'); Swal.fire({ title: 'Canceled!', timer: 2000, text: 'You Canceled  {{ booking.bookable_asset.asset.bookable_asset_name }}, {{ booking.bookable_asset.name }}', footer:'{{ booking.date }} {{ booking.start_time }}-{{ booking.end_time }}', icon: 'success' }); } });"
+                                class="text-slate-800 hover:text-red-600 text-sm bg-white hover:bg-slate-100 border border-slate-200 rounded-md font-medium px-2 py-1 flex items-center justify-center transition-all duration-300 ease-in-out group">
+                            <svg xmlns="http://www.w3.org/2000/svg"
+                                 fill="none"
+                                 viewBox="0 0 24 24"
+                                 stroke-width="1.5"
+                                 stroke="currentColor"
+                                 class="size-6">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="m9.75 9.75 4.5 4.5m0-4.5-4.5 4.5M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+                            </svg>
+                            <span class="ml-2 hidden lg:inline-block group-hover:inline-block">Cancel Booking</span>
+                        </button>
+                    {% endif %}
+                {% endif %}
+            </div>
+        </div>
+    </div>
+{% endblock content %}

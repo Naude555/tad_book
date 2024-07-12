@@ -1,0 +1,39 @@
+{% extends "base/base.html" %}
+{% block content %}
+  <div class="flex justify-center mt-10">
+    <div class="w-full max-w-2xl bg-gray-200 p-8 rounded-lg shadow-md">
+      <h1 class="text-center text-3xl font-semibold mb-6">Profile</h1>
+      <ul class="list-disc pl-5">
+        <li>
+          <a href="{% url 'accounts:profile_update' %}" class="underline">Update Profile</a>
+        </li>
+        <li>
+          <a href="{% url 'accounts:organization' %}" class="underline">Manage Organizations</a>
+        </li>
+        <!-- Add other links/actions as needed -->
+      </ul>
+      <div hx-get="{% url 'accounts:membership_tables' %}" hx-trigger="load">
+        {% include "accounts/partials/organization_membership_details_tables.html" %}
+      </div>
+    </div>
+    <div class="w-full max-w-2xl bg-gray-200 p-8 rounded-lg shadow-md">
+      {% include "bookings/partials/all_bookings_day_view.html" %}
+      {% comment %} <div class="w-full max-w-2xl bg-gray-200 p-8 rounded-lg shadow-md" hx-get="{% url "bookings:get_today_bookings" %}" hx-trigger="load" hx-target="#today_bookings" hx-swap="outerHTML" hx-indicator="#my_bookings_indicator">
+        <h1 class="text-center text-3xl font-semibold mb-6">Today's Bookings</h1>
+        <div id="my_bookings_indicator" class="htmx-indicator">
+          <strong role="status">Getting bookings...</strong>
+          <div class="spinner-border ms-auto" aria-hidden="true"></div>
+        </div>
+        {% include "bookings/partials/bookings_today.html" %}
+      </div>
+      <div class="w-full max-w-2xl bg-gray-200 p-8 rounded-lg shadow-md" hx-get="{% url "bookings:get_today_bookings_participants" %}" hx-trigger="load" hx-target="#today_bookings_participants" hx-swap="outerHTML" hx-indicator="#participants_bookings_indicator">
+        <h1 class="text-center text-3xl font-semibold mb-6">Participant Bookings</h1>
+        <div id="participants_bookings_indicator" class="htmx-indicator">
+          <strong role="status">Getting bookings...</strong>
+          <div class="spinner-border ms-auto" aria-hidden="true"></div>
+        </div>
+        {% include "bookings/partials/bookings_today_participants.html" %}
+      </div> {% endcomment %}
+    </div>
+  </div>
+{% endblock content %}
