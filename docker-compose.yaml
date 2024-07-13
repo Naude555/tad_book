@@ -15,7 +15,7 @@ services:
     ports:
       - "8874:8000"
     environment:
-      - DJANGO_SETTINGS_MODULE=config.settings.production
+      - DJANGO_SETTINGS_MODULE=config.django.production
     depends_on:
       - redis
     restart: always
@@ -27,7 +27,7 @@ services:
     volumes:
       - .:/code
     environment:
-      - DJANGO_SETTINGS_MODULE=config.settings.production
+      - DJANGO_SETTINGS_MODULE=config.django.production
     depends_on:
       - redis
       - tad_book
@@ -40,7 +40,7 @@ services:
     volumes:
       - .:/code
     environment:
-      - DJANGO_SETTINGS_MODULE=config.settings.production
+      - DJANGO_SETTINGS_MODULE=config.django.production
     depends_on:
       - redis
       - tad_book
