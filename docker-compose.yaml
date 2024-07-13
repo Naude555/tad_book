@@ -13,7 +13,7 @@ services:
     volumes:
       - .:/code
     ports:
-      - "8874:8000"
+      - "8000:8000"
     environment:
       - DJANGO_SETTINGS_MODULE=config.django.production
     depends_on:
