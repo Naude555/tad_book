@@ -176,49 +176,50 @@ def send_membership_deletion_notification_email(sender, instance, **kwargs):
 
 @receiver(post_save, sender=CustomUser)
 def send_invitation_notification_email(sender, instance, created, **kwargs):
-    if created:
-        email = instance.email
-        is_active = instance.is_active
+    if not created:
+        return
+    is_active = instance.is_active
+    if not is_active:
+
+        # Determine subject line: Differentiate between created and updated bookings
+        subject = "You were invited to claim an account on TAD Book"
+
+        # Complete message for the email body
+        message = "You received this message because you were added as a participant to a booking or as a member to an organization."
+        website_url = f"{Config.objects.get(pk=1).website_url}"
         invitation_token = instance.username
 
-        if not is_active:
+        invitation_url = (
+            f"{website_url}{reverse('accounts:claim_account', args=[invitation_token])}"
+        )
+        logger.info(invitation_url)
 
-            # Determine subject line: Differentiate between created and updated bookings
-            subject = "You were invited to claim an account on TAD Book"
+        from_email = "noreply@example.com"
+        email = instance.email
+        user_recipient_list = email
 
-            # Complete message for the email body
-            message = "You received this message because you were added as a participant to a booking or as a member to an organization."
-            website_url = (
-                f"{Config.objects.get(pk=1).website_url}{reverse('accounts:login')}"
-            )
-            invitation_url = f"{website_url}{reverse('accounts:claim_account', args=[invitation_token])}"
-            logger.info(invitation_url)
+        template = "email_templates/invitation_email.html"
 
-            from_email = "noreply@example.com"
-            user_recipient_list = email
+        user_context = {
+            "subject": subject,
+            "message": message,
+            "instance": instance,
+            "invitation_url": invitation_url,
+            "website_url": website_url,
+        }
 
-            template = "email_templates/invitation_email.html"
+        # Render the HTML email content for user
+        user_html_message = render_to_string(template, user_context)
+        # Convert HTML content to plain text for non-HTML email clients
+        user_plain_message = strip_tags(user_html_message)
 
-            user_context = {
-                "subject": subject,
-                "message": message,
-                "instance": instance,
-                "invitation_url": invitation_url,
-                "website_url": website_url,
-            }
+        # Print for debugging (optional)
+        print(subject, message, from_email, user_recipient_list)
 
-            # Render the HTML email content for user
-            user_html_message = render_to_string(template, user_context)
-            # Convert HTML content to plain text for non-HTML email clients
-            user_plain_message = strip_tags(user_html_message)
-
-            # Print for debugging (optional)
-            print(subject, message, from_email, user_recipient_list)
-
-            # Send the email to the user
-            send_email_with_attachment.delay(
-                subject,
-                user_plain_message,
-                user_html_message,
-                [user_recipient_list],
-            )
+        # Send the email to the user
+        send_email_with_attachment.delay(
+            subject,
+            user_plain_message,
+            user_html_message,
+            [user_recipient_list],
+        )
