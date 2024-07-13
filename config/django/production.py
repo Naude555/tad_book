@@ -1,8 +1,10 @@
 from .base_settings import *
 
 ALLOWED_HOSTS = ["*"]
-DEBUG = True  # Set to False in production
+
+DEBUG = os.environ.get("DJANGO_DEBUG")
 SECURE_CROSS_ORIGIN_OPENER_POLICY = None
+
 
 DATABASES = {
     "default": {
