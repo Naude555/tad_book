@@ -1,7 +1,15 @@
 import os
 from celery import Celery
 
-os.environ.setdefault("DJANGO_SETTINGS_MODULE", "config.settings.production")
+from pathlib import Path
+from dotenv import load_dotenv
+
+
+# Build paths inside the project like this: BASE_DIR / 'subdir'.
+BASE_DIR = Path(__file__).resolve().parent.parent
+load_dotenv(BASE_DIR / ".env")
+
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "config.django.local_naude")
 app = Celery("Storage")
 
 app.config_from_object("django.conf:settings", namespace="CELERY")
