@@ -12,7 +12,7 @@
         </li>
         <!-- Add other links/actions as needed -->
       </ul>
-      <div hx-get="{% url 'accounts:membership_tables' %}" hx-trigger="load">
+      <div id="member_pending_and_invite" hx-get="{% url 'accounts:membership_tables' %}" hx-trigger="load">
         {% include "accounts/partials/organization_membership_details_tables.html" %}
       </div>
     </div>
